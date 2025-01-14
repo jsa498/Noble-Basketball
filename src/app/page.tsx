@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { MotionDiv, MotionH1, MotionP } from '@/components/motion';
 import { programDetails, trainingFocus, coaches } from '@/lib/constants';
@@ -19,9 +19,15 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Carousel state
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(1);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [itemsPerPage, setItemsPerPage] = useState(3);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [dragStart, setDragStart] = useState(0);
+  const [dragPosition, setDragPosition] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -36,33 +42,91 @@ export default function Home() {
 
   const totalSlides = Math.ceil(trainingFocus.length / itemsPerPage);
 
+  const handleTransitionEnd = () => {
+    if (currentSlide >= totalSlides + 1) {
+      setIsTransitioning(true);
+      setCurrentSlide(1);
+      // Use double RAF for smoother transition
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsTransitioning(false);
+        });
+      });
+    } else if (currentSlide <= 0) {
+      setIsTransitioning(true);
+      setCurrentSlide(totalSlides);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsTransitioning(false);
+        });
+      });
+    }
+  };
+
+  const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    setIsDragging(true);
+    setIsAutoPlaying(false);
+    const pos = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    setDragStart(pos);
+  };
+
+  const handleDragMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDragging) return;
+    const pos = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const delta = dragStart - pos;
+    setDragPosition(delta);
+  };
+
+  const handleDragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const threshold = window.innerWidth * 0.2; // 20% of viewport width
+    if (Math.abs(dragPosition) > threshold) {
+      if (dragPosition > 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+    }
+    setDragPosition(0);
+    setIsAutoPlaying(true);
+  };
+
   const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % totalSlides);
-  }, [totalSlides]);
+    if (!isTransitioning) {
+      setCurrentSlide(prev => prev + 1);
+    }
+  }, [isTransitioning]);
 
   const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
-  }, [totalSlides]);
+    if (!isTransitioning) {
+      setCurrentSlide(prev => prev - 1);
+    }
+  }, [isTransitioning]);
 
   const goToSlide = useCallback((index: number) => {
-    setCurrentSlide(index);
+    setCurrentSlide(index + 1);
     setIsAutoPlaying(false);
   }, []);
 
-  // Auto-play functionality
+  // Auto-play functionality with easing
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    if (!isAutoPlaying || isDragging) return;
 
     const timer = setInterval(() => {
       nextSlide();
-    }, 3000); // Change slide every 3 seconds
+    }, 5000); // Slower interval for better UX
 
     return () => clearInterval(timer);
-  }, [isAutoPlaying, nextSlide]);
+  }, [isAutoPlaying, nextSlide, isDragging]);
 
   // Pause auto-play on hover
   const handleMouseEnter = () => setIsAutoPlaying(false);
-  const handleMouseLeave = () => setIsAutoPlaying(true);
+  const handleMouseLeave = () => {
+    if (!isDragging) {
+      setIsAutoPlaying(true);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -201,6 +265,45 @@ export default function Home() {
       <section id="programs" className="relative py-20 bg-white">
         <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-5" />
         <div className="relative container mx-auto px-4">
+          {/* Gallery Section */}
+          <MotionDiv
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="mb-20"
+          >
+            <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">Training in Action</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                '/images/083CB076-315E-4D93-BE67-B70131B3DF91.JPG',
+                '/images/1BFD9662-6B1A-4883-8E5F-58C765F491F8.JPG',
+                '/images/3E4A2C59-39AE-4719-859D-E775DD95AE96.JPG',
+                '/images/405398B1-8102-4DE6-9537-D1BC39251D31.JPG',
+                '/images/C1C6C6B2-432B-4D76-9C95-457DB7A4B411.JPG',
+                '/images/FD1DDED5-064B-4483-9E1B-1FD4C11ABC48.JPG',
+              ].map((src, index) => (
+                <MotionDiv
+                  key={src}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="group relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 shadow-lg"
+                >
+                  <Image
+                    src={src}
+                    alt="Noble Basketball Training"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                </MotionDiv>
+              ))}
+            </div>
+          </MotionDiv>
+
           <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -277,9 +380,38 @@ export default function Home() {
                 {/* Desktop Carousel (3 items) */}
                 <div className="hidden md:block">
                   <div 
-                    className="flex transition-transform duration-500 ease-in-out"
-                    style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                    ref={carouselRef}
+                    className="flex touch-pan-y"
+                    style={{ 
+                      transform: `translateX(calc(-${currentSlide * 100}% - ${isDragging ? dragPosition : 0}px))`,
+                      transition: isTransitioning ? 'none' : 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
+                      willChange: 'transform'
+                    }}
+                    onTransitionEnd={handleTransitionEnd}
+                    onMouseDown={handleDragStart}
+                    onMouseMove={handleDragMove}
+                    onMouseUp={handleDragEnd}
+                    onMouseLeave={handleDragEnd}
+                    onTouchStart={handleDragStart}
+                    onTouchMove={handleDragMove}
+                    onTouchEnd={handleDragEnd}
                   >
+                    {/* Clone last page at the beginning */}
+                    <div className="w-full flex-none grid grid-cols-3 gap-6 p-8">
+                      {trainingFocus.slice(-3).map((focus, index) => (
+                        <div
+                          key={`clone-start-${index}`}
+                          className="bg-emerald-50 rounded-xl p-6 transform transition-all duration-300 hover:scale-[1.02]"
+                        >
+                          <h3 className="text-xl font-semibold mb-3 text-gray-900">{focus}</h3>
+                          <p className="text-gray-600">
+                            Professional instruction and practice drills focused on mastering this essential skill.
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Original slides */}
                     {Array.from({ length: Math.ceil(trainingFocus.length / 3) }).map((_, pageIndex) => (
                       <div key={pageIndex} className="w-full flex-none grid grid-cols-3 gap-6 p-8">
                         {trainingFocus.slice(pageIndex * 3, (pageIndex + 1) * 3).map((focus, index) => (
@@ -295,6 +427,21 @@ export default function Home() {
                         ))}
                       </div>
                     ))}
+
+                    {/* Clone first page at the end */}
+                    <div className="w-full flex-none grid grid-cols-3 gap-6 p-8">
+                      {trainingFocus.slice(0, 3).map((focus, index) => (
+                        <div
+                          key={`clone-end-${index}`}
+                          className="bg-emerald-50 rounded-xl p-6 transform transition-all duration-300 hover:scale-[1.02]"
+                        >
+                          <h3 className="text-xl font-semibold mb-3 text-gray-900">{focus}</h3>
+                          <p className="text-gray-600">
+                            Professional instruction and practice drills focused on mastering this essential skill.
+                          </p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
@@ -302,8 +449,23 @@ export default function Home() {
                 <div className="md:hidden">
                   <div 
                     className="flex transition-transform duration-500 ease-in-out"
-                    style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                    style={{ 
+                      transform: `translateX(-${currentSlide * 100}%)`,
+                      transitionProperty: isTransitioning ? 'none' : 'transform'
+                    }}
+                    onTransitionEnd={handleTransitionEnd}
                   >
+                    {/* Clone last item at the beginning */}
+                    <div className="w-full flex-none p-6">
+                      <div className="bg-emerald-50 rounded-xl p-6">
+                        <h3 className="text-xl font-semibold mb-3 text-gray-900">{trainingFocus[trainingFocus.length - 1]}</h3>
+                        <p className="text-gray-600">
+                          Professional instruction and practice drills focused on mastering this essential skill.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Original items */}
                     {trainingFocus.map((focus, index) => (
                       <div
                         key={index}
@@ -317,6 +479,16 @@ export default function Home() {
                         </div>
                       </div>
                     ))}
+
+                    {/* Clone first item at the end */}
+                    <div className="w-full flex-none p-6">
+                      <div className="bg-emerald-50 rounded-xl p-6">
+                        <h3 className="text-xl font-semibold mb-3 text-gray-900">{trainingFocus[0]}</h3>
+                        <p className="text-gray-600">
+                          Professional instruction and practice drills focused on mastering this essential skill.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -326,8 +498,10 @@ export default function Home() {
                     <button
                       key={index}
                       onClick={() => goToSlide(index)}
-                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                        index === currentSlide ? 'bg-emerald-600 w-4' : 'bg-emerald-200'
+                      className={`w-2 h-2 rounded-full transition-all duration-500 ${
+                        index === (currentSlide - 1) % totalSlides 
+                          ? 'bg-emerald-600 w-8' 
+                          : 'bg-emerald-200 hover:bg-emerald-300'
                       }`}
                       aria-label={`Go to slide ${index + 1}`}
                     />
@@ -337,7 +511,7 @@ export default function Home() {
                 {/* Navigation Arrows */}
                 <button
                   onClick={prevSlide}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 shadow-lg flex items-center justify-center text-gray-600 hover:bg-white transition-all duration-200"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-gray-600 hover:bg-white hover:scale-110 transition-all duration-300"
                   aria-label="Previous slide"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -346,7 +520,7 @@ export default function Home() {
                 </button>
                 <button
                   onClick={nextSlide}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 shadow-lg flex items-center justify-center text-gray-600 hover:bg-white transition-all duration-200"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-gray-600 hover:bg-white hover:scale-110 transition-all duration-300"
                   aria-label="Next slide"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -418,6 +592,16 @@ export default function Home() {
                 viewport={{ once: true }}
                 className="group bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
+                <div className="relative h-64 overflow-hidden">
+                  <Image
+                    src={index === 0 ? '/images/FD1DDED5-064B-4483-9E1B-1FD4C11ABC48.JPG' : '/images/405398B1-8102-4DE6-9537-D1BC39251D31.JPG'}
+                    alt={`${coach.name} - ${coach.title}`}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                </div>
                 <div className="p-8">
                   <h3 className="text-2xl font-bold mb-2 text-gray-900 group-hover:text-emerald-600 transition-colors">{coach.name}</h3>
                   <h4 className="text-emerald-600 font-semibold mb-4">{coach.title}</h4>
@@ -435,12 +619,20 @@ export default function Home() {
             className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 hover:shadow-xl transition-all duration-300"
           >
             <div className="text-center">
-              <h3 className="text-2xl font-bold mb-4 text-gray-900">Our Sponsors</h3>
-              <div className="mb-8">
-                <h4 className="text-lg font-semibold mb-2 text-emerald-600">Exotic Detailing</h4>
-                <p className="text-gray-600">
-                  We're proud to partner with local businesses that support youth sports development.
-                </p>
+              <h3 className="text-2xl font-bold mb-8 text-gray-900">Our Sponsors</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div className="space-y-3">
+                  <h4 className="text-lg font-semibold text-emerald-600">Exotic Detailing</h4>
+                  <p className="text-gray-600">
+                    Premium auto detailing services supporting local youth sports development.
+                  </p>
+                </div>
+                <div className="space-y-3">
+                  <h4 className="text-lg font-semibold text-emerald-600">DevFlow Technologies</h4>
+                  <p className="text-gray-600">
+                    Innovative software solutions empowering the next generation of athletes.
+                  </p>
+                </div>
               </div>
               <div className="p-6 bg-emerald-50 rounded-xl">
                 <p className="text-gray-900 font-medium mb-2">Interested in becoming a sponsor?</p>

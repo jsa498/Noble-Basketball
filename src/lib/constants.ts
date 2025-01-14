@@ -51,7 +51,6 @@ export const coaches = [
 export const trainingFocus = [
   "Strong shooting form",
   "Quick layups under pressure",
-  "Post work",
   "Perimeter shooting",
   "Advanced dribbling",
   "Court vision",
