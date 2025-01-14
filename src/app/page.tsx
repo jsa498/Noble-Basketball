@@ -5,6 +5,7 @@ import { MotionDiv, MotionH1, MotionP, GlowingButton } from '@/components/motion
 import { programDetails, trainingFocus, coaches } from '@/lib/constants';
 import emailjs from '@emailjs/browser';
 import TrainingGallery from '@/components/training-gallery';
+import Image from 'next/image';
 
 type ProgramAgeGroup = 'juniors' | 'seniors';
 type ProgramSessions = 'oneDay' | 'twoDays';
@@ -944,12 +945,69 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 hover:shadow-xl transition-all duration-300"
+                className="group bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300"
               >
-                <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-gray-900">{coach.name}</h3>
-                  <p className="text-emerald-600 font-medium">{coach.title}</p>
+                <div className="relative h-64 overflow-hidden">
+                  {coach.image && (
+                    <Image
+                      src={coach.image}
+                      alt={coach.name}
+                      fill
+                      className="object-cover transform group-hover:scale-105 transition-transform duration-500"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h3 className="text-2xl font-bold text-white mb-1">{coach.name}</h3>
+                    <p className="text-emerald-400 font-medium">{coach.title}</p>
+                  </div>
+                </div>
+                <div className="p-6 space-y-4">
                   <p className="text-gray-600">{coach.bio}</p>
+                  <div className="flex items-center space-x-4 pt-4">
+                    {coach.certifications?.map((cert, i) => (
+                      <span
+                        key={i}
+                        className="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-sm font-medium"
+                      >
+                        {cert}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <div className="flex space-x-4">
+                      {coach.social?.linkedin && (
+                        <a
+                          href={coach.social.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                          </svg>
+                        </a>
+                      )}
+                      {coach.social?.instagram && (
+                        <a
+                          href={coach.social.instagram}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                          </svg>
+                        </a>
+                      )}
+                    </div>
+                    <button
+                      className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium"
+                      onClick={() => window.location.href = '#contact'}
+                    >
+                      Book a Session
+                    </button>
+                  </div>
                 </div>
               </MotionDiv>
             ))}
@@ -965,22 +1023,90 @@ export default function Home() {
             <div className="text-center">
               <h3 className="text-2xl font-bold mb-8 text-gray-900">Our Sponsors</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div className="space-y-3">
-                  <h4 className="text-lg font-semibold text-emerald-600">Exotic Detailing</h4>
-                  <p className="text-gray-600">
-                    Premium auto detailing services supporting local youth sports development.
-                  </p>
+                <div className="group relative overflow-hidden rounded-xl bg-white p-6 shadow-md hover:shadow-xl transition-all duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative">
+                    <div className="mb-4 h-16 w-16 mx-auto">
+                      <Image
+                        src="/images/exotic-detailing-logo.png"
+                        alt="Exotic Detailing Logo"
+                        width={64}
+                        height={64}
+                        className="object-contain"
+                      />
+                    </div>
+                    <h4 className="text-lg font-semibold text-emerald-600 mb-2">Exotic Detailing</h4>
+                    <p className="text-gray-600 mb-4">
+                      Premium auto detailing services supporting local youth sports development.
+                    </p>
+                    <div className="pt-4 border-t border-gray-100">
+                      <p className="text-sm text-gray-500 italic">
+                        "Proud to support the next generation of athletes in our community."
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="space-y-3">
-                  <h4 className="text-lg font-semibold text-emerald-600">DevFlow Technologies</h4>
-                  <p className="text-gray-600">
-                    Innovative software solutions empowering the next generation of athletes.
-                  </p>
+
+                <div className="group relative overflow-hidden rounded-xl bg-white p-6 shadow-md hover:shadow-xl transition-all duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative">
+                    <div className="mb-4 h-16 w-16 mx-auto">
+                      <Image
+                        src="/images/devflow-logo.png"
+                        alt="DevFlow Technologies Logo"
+                        width={64}
+                        height={64}
+                        className="object-contain"
+                      />
+                    </div>
+                    <h4 className="text-lg font-semibold text-emerald-600 mb-2">DevFlow Technologies</h4>
+                    <p className="text-gray-600 mb-4">
+                      Innovative software solutions empowering the next generation of athletes.
+                    </p>
+                    <div className="pt-4 border-t border-gray-100">
+                      <p className="text-sm text-gray-500 italic">
+                        "Technology and sports go hand in hand in modern athlete development."
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="p-6 bg-emerald-50 rounded-xl">
-                <p className="text-gray-900 font-medium mb-2">Interested in becoming a sponsor?</p>
-                <p className="text-gray-600">Contact us to learn more about partnership opportunities.</p>
+
+              <div className="bg-emerald-50 rounded-xl p-8">
+                <h4 className="text-lg font-semibold text-gray-900 mb-4">Interested in becoming a sponsor?</h4>
+                <p className="text-gray-600 mb-6">
+                  Join us in shaping the future of youth basketball. Our sponsorship program offers various 
+                  benefits and opportunities to make a real impact in our community.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-sm">
+                  <div className="flex items-center space-x-2 text-gray-600">
+                    <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Brand Visibility</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-gray-600">
+                    <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Community Impact</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-gray-600">
+                    <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Event Access</span>
+                  </div>
+                </div>
+                <a
+                  href="#contact"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-200 font-medium"
+                >
+                  Become a Sponsor
+                  <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </a>
               </div>
             </div>
           </MotionDiv>
