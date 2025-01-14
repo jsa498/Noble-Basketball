@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+// Image gallery configuration
 const images = [
   '/images/083CB076-315E-4D93-BE67-B70131B3DF91.JPG',
   '/images/1BFD9662-6B1A-4883-8E5F-58C765F491F8.JPG',
