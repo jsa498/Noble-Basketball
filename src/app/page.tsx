@@ -440,60 +440,51 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section id="home" className="relative h-[90vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 to-emerald-800 z-0" />
-        <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-10 z-0" />
-        <div 
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%)',
-          }}
-        />
-        <div className="relative z-10 container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center text-white">
-            <MotionDiv
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="w-32 h-32 mx-auto mb-8 relative"
-            >
-        <Image
-                src="/nobleLogo.jpg"
-                alt="Noble Basketball Logo"
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-contain rounded-full"
-          priority
-        />
-            </MotionDiv>
-            <MotionH1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg"
-            >
-              Elevate Your Game with Noble Basketball
-            </MotionH1>
-            <MotionP 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-xl md:text-2xl mb-8 text-white/90"
-            >
-              Comprehensive youth training and skill development programs for ages {programDetails.ageGroups.juniors.ageRange} and {programDetails.ageGroups.seniors.ageRange}
-            </MotionP>
-            <MotionDiv
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              <GlowingButton
-                href="#contact"
-                text="Join Now"
-                className="text-lg"
-              />
-            </MotionDiv>
-          </div>
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* Video Background */}
+        <div className="absolute inset-0 w-full h-full">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="/videos/noble.mp4" type="video/mp4" />
+          </video>
+          {/* Dark overlay */}
+          <div className="absolute inset-0 bg-black/50" />
+        </div>
+
+        {/* Content */}
+        <div className="relative container mx-auto px-4 text-center text-white">
+          <MotionH1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg"
+          >
+            Elevate Your Game with Noble Basketball
+          </MotionH1>
+          <MotionP 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-xl md:text-2xl mb-8 text-white/90"
+          >
+            Comprehensive youth training and skill development programs for ages {programDetails.ageGroups.juniors.ageRange} and {programDetails.ageGroups.seniors.ageRange}
+          </MotionP>
+          <MotionDiv
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <GlowingButton
+              href="#contact"
+              text="Join Now"
+              className="text-lg"
+            />
+          </MotionDiv>
         </div>
       </section>
 
