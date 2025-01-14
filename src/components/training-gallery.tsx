@@ -14,7 +14,6 @@ const images = [
 
 export default function TrainingGallery() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
