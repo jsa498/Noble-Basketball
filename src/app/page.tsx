@@ -649,7 +649,18 @@ export default function Home() {
                         >
                           <h3 className="text-xl font-semibold mb-3 text-gray-900">{focus}</h3>
                           <p className="text-gray-600">
-                            High level instructions and drills focused on mastering this essential skill.
+                            {focus === "Strong shooting form" && "Master proper shooting form to become a more consistent shooter."}
+                            {focus === "Quick finishing" && "Develop elite finishing moves around the rim with both hands under defensive pressure."}
+                            {focus === "Perimeter shooting" && "Enhance your range and accuracy from beyond the arc with game-speed shooting drills."}
+                            {focus === "Advanced dribbling" && "Build confidence in your ball handling with complex dribbling combinations and moves."}
+                            {focus === "Court vision" && "Learn to read the defense and make smart decisions with the ball in real game situations."}
+                            {focus === "Stamina building" && "Improve your endurance and conditioning to maintain peak performance throughout the game."}
+                            {focus === "Mental alertness" && "Develop quick decision-making skills and basketball IQ through situational training."}
+                            {focus === "Game situations" && "Practice real-game scenarios to prepare for high-pressure moments on the court."}
+                            {focus === "Team play" && "Learn to work effectively with teammates through offensive and defensive strategies."}
+                            {focus === "Leadership on/off court" && "Develop leadership qualities and communication skills that extend beyond basketball."}
+                            {focus === "Vertical training" && "Enhance your jumping ability and explosiveness through specialized exercises."}
+                            {focus === "Body Strength and Conditioning" && "Build basketball-specific strength and agility for improved on-court performance."}
                           </p>
                         </div>
                       ))}
@@ -665,7 +676,18 @@ export default function Home() {
                           >
                             <h3 className="text-xl font-semibold mb-3 text-gray-900">{focus}</h3>
                             <p className="text-gray-600">
-                              High level instructions and drills focused on mastering this essential skill.
+                              {focus === "Strong shooting form" && "Master proper shooting form to become a more consistent shooter."}
+                              {focus === "Quick finishing" && "Develop elite finishing moves around the rim with both hands under defensive pressure."}
+                              {focus === "Perimeter shooting" && "Enhance your range and accuracy from beyond the arc with game-speed shooting drills."}
+                              {focus === "Advanced dribbling" && "Build confidence in your ball handling with complex dribbling combinations and moves."}
+                              {focus === "Court vision" && "Learn to read the defense and make smart decisions with the ball in real game situations."}
+                              {focus === "Stamina building" && "Improve your endurance and conditioning to maintain peak performance throughout the game."}
+                              {focus === "Mental alertness" && "Develop quick decision-making skills and basketball IQ through situational training."}
+                              {focus === "Game situations" && "Practice real-game scenarios to prepare for high-pressure moments on the court."}
+                              {focus === "Team play" && "Learn to work effectively with teammates through offensive and defensive strategies."}
+                              {focus === "Leadership on/off court" && "Develop leadership qualities and communication skills that extend beyond basketball."}
+                              {focus === "Vertical training" && "Enhance your jumping ability and explosiveness through specialized exercises."}
+                              {focus === "Body Strength and Conditioning" && "Build basketball-specific strength and agility for improved on-court performance."}
                             </p>
                           </div>
                         ))}
@@ -681,7 +703,18 @@ export default function Home() {
                         >
                           <h3 className="text-xl font-semibold mb-3 text-gray-900">{focus}</h3>
                           <p className="text-gray-600">
-                            High level instructions and drills focused on mastering this essential skill.
+                            {focus === "Strong shooting form" && "Master proper shooting form to become a more consistent shooter."}
+                            {focus === "Quick finishing" && "Develop elite finishing moves around the rim with both hands under defensive pressure."}
+                            {focus === "Perimeter shooting" && "Enhance your range and accuracy from beyond the arc with game-speed shooting drills."}
+                            {focus === "Advanced dribbling" && "Build confidence in your ball handling with complex dribbling combinations and moves."}
+                            {focus === "Court vision" && "Learn to read the defense and make smart decisions with the ball in real game situations."}
+                            {focus === "Stamina building" && "Improve your endurance and conditioning to maintain peak performance throughout the game."}
+                            {focus === "Mental alertness" && "Develop quick decision-making skills and basketball IQ through situational training."}
+                            {focus === "Game situations" && "Practice real-game scenarios to prepare for high-pressure moments on the court."}
+                            {focus === "Team play" && "Learn to work effectively with teammates through offensive and defensive strategies."}
+                            {focus === "Leadership on/off court" && "Develop leadership qualities and communication skills that extend beyond basketball."}
+                            {focus === "Vertical training" && "Enhance your jumping ability and explosiveness through specialized exercises."}
+                            {focus === "Body Strength and Conditioning" && "Build basketball-specific strength and agility for improved on-court performance."}
                           </p>
                         </div>
                       ))}
@@ -704,7 +737,18 @@ export default function Home() {
                       <div className="bg-emerald-50 rounded-xl p-6">
                         <h3 className="text-xl font-semibold mb-3 text-gray-900">{trainingFocus[trainingFocus.length - 1]}</h3>
                         <p className="text-gray-600">
-                          High level instructions and drills focused on mastering this essential skill.
+                          {trainingFocus[trainingFocus.length - 1] === "Strong shooting form" && "Master proper shooting form to become a more consistent shooter."}
+                          {trainingFocus[trainingFocus.length - 1] === "Quick finishing" && "Develop elite finishing moves around the rim with both hands under defensive pressure."}
+                          {trainingFocus[trainingFocus.length - 1] === "Perimeter shooting" && "Enhance your range and accuracy from beyond the arc with game-speed shooting drills."}
+                          {trainingFocus[trainingFocus.length - 1] === "Advanced dribbling" && "Build confidence in your ball handling with complex dribbling combinations and moves."}
+                          {trainingFocus[trainingFocus.length - 1] === "Court vision" && "Learn to read the defense and make smart decisions with the ball in real game situations."}
+                          {trainingFocus[trainingFocus.length - 1] === "Stamina building" && "Improve your endurance and conditioning to maintain peak performance throughout the game."}
+                          {trainingFocus[trainingFocus.length - 1] === "Mental alertness" && "Develop quick decision-making skills and basketball IQ through situational training."}
+                          {trainingFocus[trainingFocus.length - 1] === "Game situations" && "Practice real-game scenarios to prepare for high-pressure moments on the court."}
+                          {trainingFocus[trainingFocus.length - 1] === "Team play" && "Learn to work effectively with teammates through offensive and defensive strategies."}
+                          {trainingFocus[trainingFocus.length - 1] === "Leadership on/off court" && "Develop leadership qualities and communication skills that extend beyond basketball."}
+                          {trainingFocus[trainingFocus.length - 1] === "Vertical training" && "Enhance your jumping ability and explosiveness through specialized exercises."}
+                          {trainingFocus[trainingFocus.length - 1] === "Body Strength and Conditioning" && "Build basketball-specific strength and agility for improved on-court performance."}
                         </p>
                       </div>
                     </div>
@@ -718,7 +762,18 @@ export default function Home() {
                         <div className="bg-emerald-50 rounded-xl p-6">
                           <h3 className="text-xl font-semibold mb-3 text-gray-900">{focus}</h3>
                           <p className="text-gray-600">
-                            High level instructions and drills focused on mastering this essential skill.
+                            {focus === "Strong shooting form" && "Master proper shooting form to become a more consistent shooter."}
+                            {focus === "Quick finishing" && "Develop elite finishing moves around the rim with both hands under defensive pressure."}
+                            {focus === "Perimeter shooting" && "Enhance your range and accuracy from beyond the arc with game-speed shooting drills."}
+                            {focus === "Advanced dribbling" && "Build confidence in your ball handling with complex dribbling combinations and moves."}
+                            {focus === "Court vision" && "Learn to read the defense and make smart decisions with the ball in real game situations."}
+                            {focus === "Stamina building" && "Improve your endurance and conditioning to maintain peak performance throughout the game."}
+                            {focus === "Mental alertness" && "Develop quick decision-making skills and basketball IQ through situational training."}
+                            {focus === "Game situations" && "Practice real-game scenarios to prepare for high-pressure moments on the court."}
+                            {focus === "Team play" && "Learn to work effectively with teammates through offensive and defensive strategies."}
+                            {focus === "Leadership on/off court" && "Develop leadership qualities and communication skills that extend beyond basketball."}
+                            {focus === "Vertical training" && "Enhance your jumping ability and explosiveness through specialized exercises."}
+                            {focus === "Body Strength and Conditioning" && "Build basketball-specific strength and agility for improved on-court performance."}
                           </p>
                         </div>
                       </div>
@@ -729,7 +784,18 @@ export default function Home() {
                       <div className="bg-emerald-50 rounded-xl p-6">
                         <h3 className="text-xl font-semibold mb-3 text-gray-900">{trainingFocus[0]}</h3>
                         <p className="text-gray-600">
-                          High level instructions and drills focused on mastering this essential skill.
+                          {trainingFocus[0] === "Strong shooting form" && "Master proper shooting form to become a more consistent shooter."}
+                          {trainingFocus[0] === "Quick finishing" && "Develop elite finishing moves around the rim with both hands under defensive pressure."}
+                          {trainingFocus[0] === "Perimeter shooting" && "Enhance your range and accuracy from beyond the arc with game-speed shooting drills."}
+                          {trainingFocus[0] === "Advanced dribbling" && "Build confidence in your ball handling with complex dribbling combinations and moves."}
+                          {trainingFocus[0] === "Court vision" && "Learn to read the defense and make smart decisions with the ball in real game situations."}
+                          {trainingFocus[0] === "Stamina building" && "Improve your endurance and conditioning to maintain peak performance throughout the game."}
+                          {trainingFocus[0] === "Mental alertness" && "Develop quick decision-making skills and basketball IQ through situational training."}
+                          {trainingFocus[0] === "Game situations" && "Practice real-game scenarios to prepare for high-pressure moments on the court."}
+                          {trainingFocus[0] === "Team play" && "Learn to work effectively with teammates through offensive and defensive strategies."}
+                          {trainingFocus[0] === "Leadership on/off court" && "Develop leadership qualities and communication skills that extend beyond basketball."}
+                          {trainingFocus[0] === "Vertical training" && "Enhance your jumping ability and explosiveness through specialized exercises."}
+                          {trainingFocus[0] === "Body Strength and Conditioning" && "Build basketball-specific strength and agility for improved on-court performance."}
                         </p>
                       </div>
                     </div>
@@ -755,19 +821,19 @@ export default function Home() {
                 {/* Navigation Arrows */}
                 <button
                   onClick={prevSlide}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-gray-600 hover:bg-white hover:scale-110 transition-all duration-300"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-gray-600 hover:bg-white hover:scale-110 transition-all duration-300"
                   aria-label="Previous slide"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                   </svg>
                 </button>
                 <button
                   onClick={nextSlide}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-gray-600 hover:bg-white hover:scale-110 transition-all duration-300"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-gray-600 hover:bg-white hover:scale-110 transition-all duration-300"
                   aria-label="Next slide"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </button>
