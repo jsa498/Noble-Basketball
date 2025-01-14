@@ -2,18 +2,223 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
-import { MotionDiv, MotionH1, MotionP } from '@/components/motion';
+import { MotionDiv, MotionH1, MotionP, GlowingButton } from '@/components/motion';
 import { programDetails, trainingFocus, coaches } from '@/lib/constants';
 import emailjs from '@emailjs/browser';
+import TrainingGallery from '@/components/training-gallery';
+
+type ProgramAgeGroup = 'juniors' | 'seniors';
+type ProgramSessions = 'oneDay' | 'twoDays';
+
+interface FormData {
+  childName: string;
+  childAge: string;
+  parentName: string;
+  email: string;
+  phone: string;
+  message: string;
+  program: {
+    ageGroup: ProgramAgeGroup;
+    sessions: ProgramSessions;
+  };
+}
+
+interface Program {
+  name: string;
+  ageRange: string;
+  pricing: {
+    oneDay: number;
+    twoDays: number;
+  };
+}
+
+interface ProgramDetails {
+  ageGroups: {
+    juniors: Program;
+    seniors: Program;
+  };
+  maxGroupSize: number;
+  features: string[];
+}
+
+interface ProgramSelectionModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  program: ProgramAgeGroup;
+  onConfirm: (sessions: ProgramSessions) => void;
+}
+
+const ProgramSelectionModal = ({ isOpen, onClose, program, onConfirm }: ProgramSelectionModalProps) => {
+  if (!isOpen) return null;
+
+  const programInfo = (programDetails as ProgramDetails).ageGroups[program];
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-75 backdrop-blur-sm">
+      <div className="flex min-h-full items-center justify-center p-4">
+        <MotionDiv
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.2 }}
+          className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-xl mx-4 sm:mx-auto"
+        >
+          {/* Header */}
+          <div className="bg-emerald-600 p-6 text-center">
+            <h3 className="text-2xl font-bold text-white">
+              {programInfo.name}
+            </h3>
+            <p className="text-emerald-50 mt-1">
+              Ages {programInfo.ageRange}
+            </p>
+          </div>
+
+          {/* Content */}
+          <div className="p-6">
+            <p className="text-gray-600 text-center text-lg mb-6">
+              Choose your preferred training schedule:
+            </p>
+            <div className="space-y-4">
+              <button
+                onClick={() => onConfirm('oneDay')}
+                className="flex items-center justify-between w-full p-5 text-left border-2 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-200 group"
+              >
+                <div>
+                  <p className="font-semibold text-lg text-gray-900 group-hover:text-emerald-600">1 Day per Week</p>
+                  <p className="text-sm text-gray-500">Perfect for beginners</p>
+                </div>
+                <div className="text-2xl font-bold text-emerald-600">
+                  ${programInfo.pricing.oneDay}
+                </div>
+              </button>
+              
+              <button
+                onClick={() => onConfirm('twoDays')}
+                className="flex items-center justify-between w-full p-5 text-left border-2 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-200 group"
+              >
+                <div>
+                  <p className="font-semibold text-lg text-gray-900 group-hover:text-emerald-600">2 Days per Week</p>
+                  <p className="text-sm text-gray-500">Recommended for faster progress</p>
+                </div>
+                <div className="text-2xl font-bold text-emerald-600">
+                  ${programInfo.pricing.twoDays}
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="bg-gray-50 px-6 py-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full py-3 px-4 rounded-xl bg-white text-gray-700 font-medium border-2 hover:bg-gray-50 transition-colors duration-200"
+            >
+              Cancel
+            </button>
+          </div>
+
+          {/* Close button */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+          >
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </MotionDiv>
+      </div>
+    </div>
+  );
+};
+
+interface SuccessModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  programName: string;
+}
+
+const SuccessModal = ({ isOpen, onClose, programName }: SuccessModalProps) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-75 backdrop-blur-sm">
+      <div className="flex min-h-full items-center justify-center p-4">
+        <MotionDiv
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.2 }}
+          className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-xl mx-4 sm:mx-auto"
+        >
+          {/* Success Icon */}
+          <div className="bg-emerald-600 p-6 text-center">
+            <div className="mx-auto w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4">
+              <svg className="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-2">
+              Registration Successful!
+            </h3>
+            <p className="text-emerald-50">
+              Welcome to {programName}
+            </p>
+          </div>
+
+          {/* Content */}
+          <div className="p-6">
+            <div className="text-center space-y-4">
+              <p className="text-gray-600">
+                Thank you for registering with Noble Basketball! We&apos;re excited to have you join our program.
+              </p>
+              <div className="bg-emerald-50 p-4 rounded-xl">
+                <p className="text-emerald-800 font-medium">
+                  What happens next?
+                </p>
+                <ul className="text-sm text-emerald-700 mt-2 space-y-2">
+                  <li className="flex items-center">
+                    <span className="mr-2">•</span>
+                    Our team will contact you within 24 hours
+                  </li>
+                  <li className="flex items-center">
+                    <span className="mr-2">•</span>
+                    We&apos;ll help schedule your first training session
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="bg-gray-50 px-6 py-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full py-3 px-4 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-colors duration-200"
+            >
+              Got it, thanks!
+            </button>
+          </div>
+        </MotionDiv>
+      </div>
+    </div>
+  );
+};
 
 export default function Home() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     childName: '',
     childAge: '',
     parentName: '',
     email: '',
     phone: '',
     message: '',
+    program: {
+      ageGroup: 'juniors',
+      sessions: 'oneDay'
+    }
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,6 +233,11 @@ export default function Home() {
   const [isDragging, setIsDragging] = useState(false);
 
   const carouselRef = useRef<HTMLDivElement>(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState<ProgramAgeGroup | null>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successProgramName, setSuccessProgramName] = useState('');
 
   useEffect(() => {
     const handleResize = () => {
@@ -132,6 +342,10 @@ export default function Home() {
     e.preventDefault();
     setIsSubmitting(true);
     
+    const selectedProgram = (programDetails as ProgramDetails).ageGroups[formData.program.ageGroup];
+    const programCost = selectedProgram.pricing[formData.program.sessions];
+    const sessionsText = formData.program.sessions === 'oneDay' ? '1 day' : '2 days';
+    
     try {
       const templateParams = {
         to_name: "Noble Basketball",
@@ -142,30 +356,10 @@ export default function Home() {
         phone: formData.phone,
         message: formData.message || "No additional information provided",
         reply_to: formData.email,
-        subject: `New Registration: ${formData.childName} (Age ${formData.childAge})`,
-        registration_details: `
-          Registration Details:
-          -------------------
-          Child's Information:
-          • Name: ${formData.childName}
-          • Age: ${formData.childAge}
-
-          Parent/Guardian Information:
-          • Name: ${formData.parentName}
-          • Email: ${formData.email}
-          • Phone: ${formData.phone}
-
-          Additional Information:
-          ${formData.message || "None provided"}
-
-          Program Details:
-          • Two sessions per week
-          • Professional coaching
-          • Small group training (max 12 players)
-          • Regular progress assessments
-          
-          Monthly Fee: $99.99
-        `
+        program_name: selectedProgram.name,
+        sessions: `${sessionsText} per week`,
+        program_cost: programCost,
+        subject: `${selectedProgram.name} Registration`
       };
 
       await emailjs.send(
@@ -175,7 +369,11 @@ export default function Home() {
         "-ZsSTEgASt2WFOV-V"
       );
 
-      // Clear form after successful submission
+      // Set success modal data
+      setSuccessProgramName(selectedProgram.name);
+      setShowSuccessModal(true);
+
+      // Clear form
       setFormData({
         childName: '',
         childAge: '',
@@ -183,10 +381,11 @@ export default function Home() {
         email: '',
         phone: '',
         message: '',
+        program: {
+          ageGroup: 'juniors',
+          sessions: 'oneDay'
+        }
       });
-
-      // Show success message
-      alert("Thank you for registering! We'll contact you shortly with next steps.");
     } catch (error) {
       console.error("Error sending email:", error);
       alert("There was an error submitting your registration. Please try again or contact us directly.");
@@ -195,9 +394,47 @@ export default function Home() {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    if (name.includes('.')) {
+      const [parent, child] = name.split('.');
+      setFormData(prev => ({
+        ...prev,
+        [parent]: {
+          ...(prev[parent as keyof FormData] as Record<string, unknown>),
+          [child]: value
+        }
+      }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const getProgramPrice = () => {
+    const { ageGroup, sessions } = formData.program;
+    return (programDetails as ProgramDetails).ageGroups[ageGroup].pricing[sessions];
+  };
+
+  const handleProgramSelect = (program: ProgramAgeGroup) => {
+    setSelectedProgram(program);
+    setIsModalOpen(true);
+  };
+
+  const handleSessionConfirm = (sessions: ProgramSessions) => {
+    if (selectedProgram) {
+      setFormData(prev => ({
+        ...prev,
+        program: {
+          ageGroup: selectedProgram,
+          sessions: sessions
+        }
+      }));
+      setIsModalOpen(false);
+      // Smooth scroll to registration form
+      document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -243,19 +480,18 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-xl md:text-2xl mb-8 text-white/90"
             >
-              Comprehensive youth training and skill development programs for ages {programDetails.ageRange}
+              Comprehensive youth training and skill development programs for ages {programDetails.ageGroups.juniors.ageRange} and {programDetails.ageGroups.seniors.ageRange}
             </MotionP>
             <MotionDiv
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <a 
+              <GlowingButton
                 href="#contact"
-                className="inline-block bg-white text-emerald-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-emerald-50 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-              >
-                Join Now
-              </a>
+                text="Join Now"
+                className="text-lg"
+              />
             </MotionDiv>
           </div>
         </div>
@@ -274,34 +510,7 @@ export default function Home() {
             className="mb-20"
           >
             <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">Training in Action</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                '/images/083CB076-315E-4D93-BE67-B70131B3DF91.JPG',
-                '/images/1BFD9662-6B1A-4883-8E5F-58C765F491F8.JPG',
-                '/images/3E4A2C59-39AE-4719-859D-E775DD95AE96.JPG',
-                '/images/405398B1-8102-4DE6-9537-D1BC39251D31.JPG',
-                '/images/C1C6C6B2-432B-4D76-9C95-457DB7A4B411.JPG',
-                '/images/FD1DDED5-064B-4483-9E1B-1FD4C11ABC48.JPG',
-              ].map((src, index) => (
-                <MotionDiv
-                  key={src}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="group relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 shadow-lg"
-                >
-                  <Image
-                    src={src}
-                    alt="Noble Basketball Training"
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </MotionDiv>
-              ))}
-            </div>
+            <TrainingGallery />
           </MotionDiv>
 
           <MotionDiv
@@ -329,11 +538,15 @@ export default function Home() {
               <ul className="space-y-4">
                 <li className="flex items-start">
                   <span className="text-emerald-600 mr-2">•</span>
-                  <span>{programDetails.sessionsPerWeek} training sessions per week</span>
+                  <span>Flexible training schedule (1 or 2 days per week)</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-emerald-600 mr-2">•</span>
-                  <span>Small group training (maximum 12 players per group)</span>
+                  <span>Small group training (maximum {(programDetails as ProgramDetails).maxGroupSize} players per group)</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-emerald-600 mr-2">•</span>
+                  <span>Group training</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-emerald-600 mr-2">•</span>
@@ -531,48 +744,92 @@ export default function Home() {
             </MotionDiv>
           </div>
 
-          <section className="w-full py-16 px-4">
-            <MotionDiv
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="max-w-6xl mx-auto"
-            >
-              <div className="bg-emerald-600 rounded-[40px] overflow-hidden shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
-                <div className="md:flex items-center justify-between p-8 md:p-12">
-                  <div className="space-y-4 md:w-1/2">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white">Monthly Program</h2>
-                    <div className="flex items-baseline">
-                      <span className="text-5xl md:text-6xl font-bold text-white">$99.99</span>
-                      <span className="ml-2 text-lg text-emerald-100">/month</span>
-                    </div>
-                    <p className="text-emerald-100 text-lg">Join our comprehensive training program today!</p>
-                  </div>
-                  
-                  <div className="mt-6 md:mt-0 md:w-1/2 space-y-4">
-                    <div className="space-y-3">
-                      {[
-                        '2 sessions per week',
-                        'Professional coaching',
-                        'Skill development focus',
-                        'Progress tracking'
-                      ].map((feature, index) => (
-                        <div key={index} className="flex items-center text-white">
-                          <svg className="h-6 w-6 mr-2 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                          </svg>
-                          <span className="text-lg">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                    
-                    <a href="#contact" className="mt-6 inline-block w-full md:w-auto text-center px-8 py-3 bg-white text-emerald-600 font-semibold rounded-full hover:bg-emerald-50 transition-colors duration-200">
-                      Register Now
-                    </a>
-                  </div>
+          {/* Pricing Section */}
+          <section id="program-pricing" className="w-full py-16 px-4">
+            <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">Program Pricing</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+              {/* Juniors Program */}
+              <MotionDiv
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300"
+              >
+                <div className="bg-emerald-600 p-6">
+                  <h3 className="text-2xl font-bold text-white mb-2">{programDetails.ageGroups.juniors.name}</h3>
+                  <p className="text-emerald-100">Ages {programDetails.ageGroups.juniors.ageRange}</p>
                 </div>
-              </div>
-            </MotionDiv>
+                <div className="p-6 space-y-6">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-gray-600">1 Day per Week</span>
+                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.juniors.pricing.oneDay}</span>
+                    </div>
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-gray-600">2 Days per Week</span>
+                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.juniors.pricing.twoDays}</span>
+                    </div>
+                  </div>
+                  <ul className="space-y-3">
+                    {programDetails.features.map((feature, index) => (
+                      <li key={index} className="flex items-center text-gray-600">
+                        <svg className="h-5 w-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <a
+                    onClick={() => handleProgramSelect('juniors')}
+                    className="block w-full text-center px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors cursor-pointer"
+                  >
+                    Register Now
+                  </a>
+                </div>
+              </MotionDiv>
+
+              {/* Seniors Program */}
+              <MotionDiv
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300"
+              >
+                <div className="bg-emerald-700 p-6">
+                  <h3 className="text-2xl font-bold text-white mb-2">{programDetails.ageGroups.seniors.name}</h3>
+                  <p className="text-emerald-100">Ages {programDetails.ageGroups.seniors.ageRange}</p>
+                </div>
+                <div className="p-6 space-y-6">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-gray-600">1 Day per Week</span>
+                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.seniors.pricing.oneDay}</span>
+                    </div>
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-gray-600">2 Days per Week</span>
+                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.seniors.pricing.twoDays}</span>
+                    </div>
+                  </div>
+                  <ul className="space-y-3">
+                    {programDetails.features.map((feature, index) => (
+                      <li key={index} className="flex items-center text-gray-600">
+                        <svg className="h-5 w-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <a
+                    onClick={() => handleProgramSelect('seniors')}
+                    className="block w-full text-center px-6 py-3 bg-emerald-700 text-white font-semibold rounded-lg hover:bg-emerald-800 transition-colors cursor-pointer"
+                  >
+                    Register Now
+                  </a>
+                </div>
+              </MotionDiv>
+            </div>
           </section>
         </div>
       </section>
@@ -585,27 +842,17 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
             {coaches.map((coach, index) => (
               <MotionDiv
-                key={index}
+                key={coach.name}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 viewport={{ once: true }}
-                className="group bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 hover:shadow-xl transition-all duration-300"
               >
-                <div className="relative h-64 overflow-hidden">
-                  <Image
-                    src={index === 0 ? '/images/FD1DDED5-064B-4483-9E1B-1FD4C11ABC48.JPG' : '/images/405398B1-8102-4DE6-9537-D1BC39251D31.JPG'}
-                    alt={`${coach.name} - ${coach.title}`}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                </div>
-                <div className="p-8">
-                  <h3 className="text-2xl font-bold mb-2 text-gray-900 group-hover:text-emerald-600 transition-colors">{coach.name}</h3>
-                  <h4 className="text-emerald-600 font-semibold mb-4">{coach.title}</h4>
-                  <p className="text-gray-600 leading-relaxed">{coach.bio}</p>
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold text-gray-900">{coach.name}</h3>
+                  <p className="text-emerald-600 font-medium">{coach.title}</p>
+                  <p className="text-gray-600">{coach.bio}</p>
                 </div>
               </MotionDiv>
             ))}
@@ -656,7 +903,7 @@ export default function Home() {
           >
             <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">Register for Noble Basketball</h2>
             
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form id="registration-form" onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="childName" className="block text-sm font-medium text-gray-700 mb-1">
@@ -685,10 +932,52 @@ export default function Home() {
                     onChange={handleChange}
                     required
                     min="8"
-                    max="17"
+                    max="18"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
                   />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="program.ageGroup" className="block text-sm font-medium text-gray-700 mb-1">
+                    Program
+                  </label>
+                  <select
+                    id="program.ageGroup"
+                    name="program.ageGroup"
+                    value={formData.program.ageGroup}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+                  >
+                    <option value="juniors">Juniors Program (Ages 8-12)</option>
+                    <option value="seniors">Seniors Program (Ages 13-18)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="program.sessions" className="block text-sm font-medium text-gray-700 mb-1">
+                    Sessions per Week
+                  </label>
+                  <select
+                    id="program.sessions"
+                    name="program.sessions"
+                    value={formData.program.sessions}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+                  >
+                    <option value="oneDay">1 Day per Week</option>
+                    <option value="twoDays">2 Days per Week</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="bg-emerald-50 p-4 rounded-lg">
+                <p className="text-emerald-800 font-medium">
+                  Selected Program Cost: ${getProgramPrice()} per month
+                </p>
               </div>
 
               <div>
@@ -771,8 +1060,22 @@ export default function Home() {
               </button>
             </form>
           </MotionDiv>
-    </div>
+        </div>
       </section>
+
+      {/* Add the modal */}
+      <ProgramSelectionModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        program={selectedProgram || 'juniors'}
+        onConfirm={handleSessionConfirm}
+      />
+
+      <SuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        programName={successProgramName}
+      />
     </>
   );
 }

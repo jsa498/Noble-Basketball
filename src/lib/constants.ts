@@ -8,7 +8,7 @@ export const siteConfig = {
     },
     {
       title: "Programs",
-      href: "#programs",
+      href: "#program-pricing",
     },
     {
       title: "About",
@@ -22,18 +22,33 @@ export const siteConfig = {
 }
 
 export const programDetails = {
-  ageRange: "8-17",
-  monthlyPrice: 99.99,
-  sessionsPerWeek: 2,
+  ageGroups: {
+    juniors: {
+      name: "Juniors Program",
+      ageRange: "8-12",
+      pricing: {
+        oneDay: 100,
+        twoDays: 150
+      }
+    },
+    seniors: {
+      name: "Seniors Program",
+      ageRange: "13-18",
+      pricing: {
+        oneDay: 200,
+        twoDays: 250
+      }
+    }
+  },
+  maxGroupSize: 12,
   features: [
-    "Comprehensive skill development",
-    "In-house games",
     "Professional coaching",
-    "Small group training",
-    "Individual feedback",
-    "Game-like scenarios",
-  ],
-}
+    "Age-appropriate skill development",
+    "Regular progress assessments",
+    "Small group training (maximum 12 players)",
+    "Flexible scheduling options"
+  ]
+};
 
 export const coaches = [
   {

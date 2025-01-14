@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { siteConfig } from '@/lib/constants';
+import { GlowingButton } from './motion';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -145,13 +146,11 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <a
+            <GlowingButton
               href="#contact"
               onClick={(e) => handleNavClick(e, '#contact')}
-              className="px-6 py-2 bg-emerald-600 text-white rounded-full hover:bg-emerald-700 transition-colors"
-            >
-              Join Now
-            </a>
+              text="Join Now"
+            />
           </div>
 
           <div className="md:hidden">
@@ -176,7 +175,7 @@ export default function Navbar() {
             className="absolute top-20 left-4 right-4 md:hidden"
           >
             <motion.div
-              className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden border border-gray-100"
+              className="bg-white backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden border border-gray-100"
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.95 }}
@@ -205,15 +204,14 @@ export default function Navbar() {
                     </a>
                   );
                 })}
-                <a
-                  href="#contact"
-                  onClick={(e) => handleNavClick(e, '#contact')}
-                  className="flex items-center justify-center"
-                >
-                  <span className="px-6 py-2 bg-emerald-600 text-white rounded-full hover:bg-emerald-700 transition-colors">
-                    Join Now
-                  </span>
-                </a>
+                <div className="flex items-center justify-center">
+                  <GlowingButton
+                    href="#contact"
+                    onClick={(e) => handleNavClick(e, '#contact')}
+                    text="Join Now"
+                    className="w-full text-center"
+                  />
+                </div>
               </div>
             </motion.div>
           </motion.div>
