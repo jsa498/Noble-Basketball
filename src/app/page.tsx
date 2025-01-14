@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import Image from 'next/image';
 import { MotionDiv, MotionH1, MotionP, GlowingButton } from '@/components/motion';
 import { programDetails, trainingFocus, coaches } from '@/lib/constants';
 import emailjs from '@emailjs/browser';
