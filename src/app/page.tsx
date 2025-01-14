@@ -353,7 +353,7 @@ export default function Home() {
               viewport={{ once: true }}
               className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 hover:shadow-xl transition-all duration-300"
             >
-              <h3 className="text-2xl font-bold mb-6 text-gray-900">What's Included</h3>
+              <h3 className="text-2xl font-bold mb-6 text-gray-900">What&apos;s Included</h3>
               <ul className="space-y-4">
                 {programDetails.features.map((feature, index) => (
                   <li key={index} className="flex items-start">
@@ -367,7 +367,7 @@ export default function Home() {
 
           {/* Training Focus Carousel */}
           <div className="mb-16">
-            <h2 className="text-4xl font-bold text-center mb-8 text-gray-900">What You'll Learn</h2>
+            <h2 className="text-4xl font-bold text-center mb-8 text-gray-900">What You&apos;ll Learn</h2>
             <MotionDiv
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
