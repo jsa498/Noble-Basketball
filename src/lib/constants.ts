@@ -24,7 +24,7 @@ export const siteConfig = {
 export const programDetails = {
   ageGroups: {
     juniors: {
-      name: "Juniors Program",
+      name: "Juniors Training Program",
       ageRange: "8-12",
       pricing: {
         oneDay: 100,
@@ -32,7 +32,7 @@ export const programDetails = {
       }
     },
     seniors: {
-      name: "Seniors Program",
+      name: "Seniors Training Program",
       ageRange: "13-18",
       pricing: {
         oneDay: 200,
@@ -42,10 +42,10 @@ export const programDetails = {
   },
   maxGroupSize: 12,
   features: [
-    "Professional coaching",
+    "High level coaching",
     "Age-appropriate skill development",
     "Regular progress assessments",
-    "Small group training (maximum 12 players)",
+    "Group training",
     "Flexible scheduling options"
   ]
 };
@@ -65,7 +65,7 @@ export const coaches = [
 
 export const trainingFocus = [
   "Strong shooting form",
-  "Quick layups under pressure",
+  "Quick finishing",
   "Perimeter shooting",
   "Advanced dribbling",
   "Court vision",
@@ -73,4 +73,7 @@ export const trainingFocus = [
   "Mental alertness",
   "Game situations",
   "Team play",
+  "Leadership on/off court",
+  "Vertical training",
+  "Body Strength and Conditioning"
 ] 

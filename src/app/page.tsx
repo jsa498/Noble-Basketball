@@ -87,7 +87,7 @@ const ProgramSelectionModal = ({ isOpen, onClose, program, onConfirm }: ProgramS
                   <p className="text-sm text-gray-500">Perfect for beginners</p>
                 </div>
                 <div className="text-2xl font-bold text-emerald-600">
-                  ${programInfo.pricing.oneDay}
+                  ${programInfo.pricing.oneDay}/month
                 </div>
               </button>
               
@@ -100,7 +100,7 @@ const ProgramSelectionModal = ({ isOpen, onClose, program, onConfirm }: ProgramS
                   <p className="text-sm text-gray-500">Recommended for faster progress</p>
                 </div>
                 <div className="text-2xl font-bold text-emerald-600">
-                  ${programInfo.pricing.twoDays}
+                  ${programInfo.pricing.twoDays}/month
                 </div>
               </button>
             </div>
@@ -528,23 +528,23 @@ export default function Home() {
               <ul className="space-y-4">
                 <li className="flex items-start">
                   <span className="text-emerald-600 mr-2">•</span>
-                  <span>Flexible training schedule (1 or 2 days per week)</span>
+                  <span>Skill development</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-emerald-600 mr-2">•</span>
-                  <span>Small group training (maximum {(programDetails as ProgramDetails).maxGroupSize} players per group)</span>
+                  <span>Team plays/drills</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-emerald-600 mr-2">•</span>
-                  <span>Group training</span>
+                  <span>Full-Body conditioning</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-emerald-600 mr-2">•</span>
-                  <span>Age-appropriate skill development</span>
+                  <span>Group Training</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-emerald-600 mr-2">•</span>
-                  <span>Regular progress assessments</span>
+                  <span>Tournaments/Scrimmages</span>
                 </li>
               </ul>
             </MotionDiv>
@@ -558,13 +558,54 @@ export default function Home() {
             >
               <h3 className="text-2xl font-bold mb-6 text-gray-900">What&apos;s Included</h3>
               <ul className="space-y-4">
-                {programDetails.features.map((feature, index) => (
-                  <li key={index} className="flex items-start">
-                    <span className="text-emerald-600 mr-2">•</span>
-                    <span>{feature}</span>
-                  </li>
-                ))}
+                <li className="flex items-start">
+                  <span className="text-emerald-600 mr-2">•</span>
+                  <span>High Level Coaching</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-emerald-600 mr-2">•</span>
+                  <span>Flexible schedule</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-emerald-600 mr-2">•</span>
+                  <span>Regular progress assessments</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-emerald-600 mr-2">•</span>
+                  <span>Friendly environment</span>
+                </li>
               </ul>
+            </MotionDiv>
+
+            <MotionDiv
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 hover:shadow-xl transition-all duration-300 col-span-1 md:col-span-2"
+            >
+              <h3 className="text-2xl font-bold mb-4 text-gray-900">Tournament Opportunities</h3>
+              <p className="text-gray-600 mb-6">
+                Players will have the opportunity to participate in local tournaments and compete as part of our Noble Basketball team. Tournament participation requires tryouts and selection to the competitive team. Additional tournament fees will be determined based on the number of tournaments entered throughout the season.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-start">
+                  <span className="text-emerald-600 mr-2">•</span>
+                  <span>Regular scrimmages and game situations</span>
+                </div>
+                <div className="flex items-start">
+                  <span className="text-emerald-600 mr-2">•</span>
+                  <span>Competitive team tryouts</span>
+                </div>
+                <div className="flex items-start">
+                  <span className="text-emerald-600 mr-2">•</span>
+                  <span>Local tournament participation</span>
+                </div>
+                <div className="flex items-start">
+                  <span className="text-emerald-600 mr-2">•</span>
+                  <span>Team building and leadership development</span>
+                </div>
+              </div>
             </MotionDiv>
           </div>
 
@@ -608,7 +649,7 @@ export default function Home() {
                         >
                           <h3 className="text-xl font-semibold mb-3 text-gray-900">{focus}</h3>
                           <p className="text-gray-600">
-                            Professional instruction and practice drills focused on mastering this essential skill.
+                            High level instructions and drills focused on mastering this essential skill.
                           </p>
                         </div>
                       ))}
@@ -624,7 +665,7 @@ export default function Home() {
                           >
                             <h3 className="text-xl font-semibold mb-3 text-gray-900">{focus}</h3>
                             <p className="text-gray-600">
-                              Professional instruction and practice drills focused on mastering this essential skill.
+                              High level instructions and drills focused on mastering this essential skill.
                             </p>
                           </div>
                         ))}
@@ -640,7 +681,7 @@ export default function Home() {
                         >
                           <h3 className="text-xl font-semibold mb-3 text-gray-900">{focus}</h3>
                           <p className="text-gray-600">
-                            Professional instruction and practice drills focused on mastering this essential skill.
+                            High level instructions and drills focused on mastering this essential skill.
                           </p>
                         </div>
                       ))}
@@ -663,7 +704,7 @@ export default function Home() {
                       <div className="bg-emerald-50 rounded-xl p-6">
                         <h3 className="text-xl font-semibold mb-3 text-gray-900">{trainingFocus[trainingFocus.length - 1]}</h3>
                         <p className="text-gray-600">
-                          Professional instruction and practice drills focused on mastering this essential skill.
+                          High level instructions and drills focused on mastering this essential skill.
                         </p>
                       </div>
                     </div>
@@ -677,7 +718,7 @@ export default function Home() {
                         <div className="bg-emerald-50 rounded-xl p-6">
                           <h3 className="text-xl font-semibold mb-3 text-gray-900">{focus}</h3>
                           <p className="text-gray-600">
-                            Professional instruction and practice drills focused on mastering this essential skill.
+                            High level instructions and drills focused on mastering this essential skill.
                           </p>
                         </div>
                       </div>
@@ -688,7 +729,7 @@ export default function Home() {
                       <div className="bg-emerald-50 rounded-xl p-6">
                         <h3 className="text-xl font-semibold mb-3 text-gray-900">{trainingFocus[0]}</h3>
                         <p className="text-gray-600">
-                          Professional instruction and practice drills focused on mastering this essential skill.
+                          High level instructions and drills focused on mastering this essential skill.
                         </p>
                       </div>
                     </div>
@@ -753,11 +794,11 @@ export default function Home() {
                   <div className="space-y-4">
                     <div className="flex justify-between items-baseline">
                       <span className="text-gray-600">1 Day per Week</span>
-                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.juniors.pricing.oneDay}</span>
+                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.juniors.pricing.oneDay}/month</span>
                     </div>
                     <div className="flex justify-between items-baseline">
                       <span className="text-gray-600">2 Days per Week</span>
-                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.juniors.pricing.twoDays}</span>
+                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.juniors.pricing.twoDays}/month</span>
                     </div>
                   </div>
                   <ul className="space-y-3">
@@ -794,11 +835,11 @@ export default function Home() {
                   <div className="space-y-4">
                     <div className="flex justify-between items-baseline">
                       <span className="text-gray-600">1 Day per Week</span>
-                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.seniors.pricing.oneDay}</span>
+                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.seniors.pricing.oneDay}/month</span>
                     </div>
                     <div className="flex justify-between items-baseline">
                       <span className="text-gray-600">2 Days per Week</span>
-                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.seniors.pricing.twoDays}</span>
+                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.seniors.pricing.twoDays}/month</span>
                     </div>
                   </div>
                   <ul className="space-y-3">
@@ -941,8 +982,8 @@ export default function Home() {
                     required
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
                   >
-                    <option value="juniors">Juniors Program (Ages 8-12)</option>
-                    <option value="seniors">Seniors Program (Ages 13-18)</option>
+                    <option value="juniors">Juniors Training Program (Ages 8-12)</option>
+                    <option value="seniors">Seniors Training Program (Ages 13-18)</option>
                   </select>
                 </div>
 
