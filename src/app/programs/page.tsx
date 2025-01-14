@@ -16,7 +16,7 @@ export default function Programs() {
           >
             <h1 className="text-4xl font-bold mb-6">Our Training Programs</h1>
             <p className="text-xl text-gray-600 mb-8">
-              Comprehensive basketball training for youth ages {programDetails.ageRange}, designed to develop
+              Comprehensive basketball training for youth ages {programDetails.ageGroups.juniors.ageRange} and {programDetails.ageGroups.seniors.ageRange}, designed to develop
               skills, build confidence, and foster a love for the game.
             </p>
           </MotionDiv>
@@ -36,11 +36,11 @@ export default function Programs() {
               <ul className="space-y-4">
                 <li className="flex items-start">
                   <span className="text-emerald-600 mr-2">•</span>
-                  <span>{programDetails.sessionsPerWeek} training sessions per week</span>
+                  <span>Flexible training schedule: one or two sessions per week</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-emerald-600 mr-2">•</span>
-                  <span>Small group training (maximum 12 players per group)</span>
+                  <span>Maximum {programDetails.maxGroupSize} players per group</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-emerald-600 mr-2">•</span>
@@ -104,14 +104,20 @@ export default function Programs() {
             viewport={{ once: true }}
             className="bg-emerald-600 text-white rounded-2xl shadow-lg p-8 max-w-2xl mx-auto"
           >
-            <h2 className="text-3xl font-bold mb-4">Monthly Program</h2>
-            <p className="text-2xl mb-2">${programDetails.monthlyPrice}</p>
-            <p className="text-lg mb-6">per month</p>
+            <h2 className="text-3xl font-bold mb-4">Program Pricing</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div>
+                <h3 className="text-xl font-semibold mb-2">One Day/Week</h3>
+                <p className="text-2xl mb-2">${programDetails.ageGroups.juniors.pricing.oneDay}</p>
+                <p className="text-lg opacity-75">per month</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-2">Two Days/Week</h3>
+                <p className="text-2xl mb-2">${programDetails.ageGroups.juniors.pricing.twoDays}</p>
+                <p className="text-lg opacity-75">per month</p>
+              </div>
+            </div>
             <ul className="text-left mb-8 space-y-2">
-              <li className="flex items-center">
-                <span className="mr-2">✓</span>
-                {programDetails.sessionsPerWeek} sessions per week
-              </li>
               <li className="flex items-center">
                 <span className="mr-2">✓</span>
                 Professional coaching
