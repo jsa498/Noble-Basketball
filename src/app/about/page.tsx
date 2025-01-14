@@ -35,7 +35,7 @@ export default function About() {
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-4">Exotic Detailing</h3>
               <p className="text-gray-600">
-                We're proud to partner with local businesses that support youth sports development.
+                We&apos;re proud to partner with local businesses that support youth sports development.
               </p>
             </div>
             <div className="mt-8 text-center text-gray-500">

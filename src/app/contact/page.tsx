@@ -39,7 +39,7 @@ export default function Contact() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="childName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Child's Name
+                  Child&apos;s Name
                 </label>
                 <input
                   type="text"
@@ -54,7 +54,7 @@ export default function Contact() {
               
               <div>
                 <label htmlFor="childAge" className="block text-sm font-medium text-gray-700 mb-1">
-                  Child's Age
+                  Child&apos;s Age
                 </label>
                 <input
                   type="number"

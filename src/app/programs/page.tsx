@@ -60,7 +60,7 @@ export default function Programs() {
               viewport={{ once: true }}
               className="bg-white rounded-2xl shadow-lg p-8"
             >
-              <h2 className="text-2xl font-bold mb-6">What's Included</h2>
+              <h2 className="text-2xl font-bold mb-6">What&apos;s Included</h2>
               <ul className="space-y-4">
                 {programDetails.features.map((feature, index) => (
                   <li key={index} className="flex items-start">
