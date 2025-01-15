@@ -1,6 +1,6 @@
 'use client';
 
-import { Instagram, Phone, Mail } from 'lucide-react';
+import { Instagram, Phone, Mail, Map } from 'lucide-react';
 import Image from 'next/image';
 
 export default function Footer() {
@@ -43,6 +43,15 @@ export default function Footer() {
             >
               <Mail size={20} />
               <span>nobull.basketball@gmail.com</span>
+            </a>
+            <a 
+              href="https://maps.google.com/?q=10677+124+St,+Surrey,+BC+V3V+0B1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors"
+            >
+              <Map size={20} />
+              <span>Khalsa School Old Yale Elementary<br />10677 124 St, Surrey, BC V3V 0B1</span>
             </a>
           </div>
 

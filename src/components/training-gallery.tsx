@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Lightbox from './lightbox';
 
 // Image gallery configuration
 const images = [
@@ -21,8 +20,6 @@ export default function TrainingGallery() {
   const [dragPosition, setDragPosition] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
     const handleResize = () => {
@@ -129,216 +126,172 @@ export default function TrainingGallery() {
     return `${baseTransform}${dragTransform}))`;
   };
 
-  const handleImageClick = (index: number) => {
-    setLightboxIndex(index);
-    setLightboxOpen(true);
-    setIsAutoPlaying(false);
-  };
-
   return (
-    <>
-      <div 
-        className="relative overflow-hidden bg-white rounded-2xl shadow-lg"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        {/* Desktop View (3 images) */}
-        <div className="hidden md:block">
-          <div 
-            ref={carouselRef}
-            className="flex touch-pan-y"
-            style={{ 
-              transform: getSlideTransform(),
-              transition: isTransitioning ? 'none' : 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
-              willChange: 'transform'
-            }}
-            onTransitionEnd={handleTransitionEnd}
-            onMouseDown={handleDragStart}
-            onMouseMove={handleDragMove}
-            onMouseUp={handleDragEnd}
-            onMouseLeave={handleDragEnd}
-            onTouchStart={handleDragStart}
-            onTouchMove={handleDragMove}
-            onTouchEnd={handleDragEnd}
-          >
-            {/* Clone last group at the beginning */}
-            <div className="w-full flex-none grid grid-cols-3 gap-4 p-4">
-              {images.slice(-3).map((src, index) => (
-                <div 
-                  key={`clone-start-${index}`} 
-                  className="aspect-[4/3] relative cursor-pointer group"
-                  onClick={() => handleImageClick(images.length - 3 + index)}
-                >
-                  <Image
-                    src={src}
-                    alt="Training moment"
-                    fill
-                    className="object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
-                    sizes="(min-width: 768px) 33vw, 100vw"
-                    priority
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-lg" />
-                </div>
-              ))}
-            </div>
-
-            {/* Original images in groups of 3 */}
-            {Array.from({ length: Math.ceil(images.length / 3) }).map((_, groupIndex) => (
-              <div key={groupIndex} className="w-full flex-none grid grid-cols-3 gap-4 p-4">
-                {images.slice(groupIndex * 3, (groupIndex + 1) * 3).map((src, index) => (
-                  <div
-                    key={src}
-                    className="aspect-[4/3] relative cursor-pointer group"
-                    onClick={() => handleImageClick(groupIndex * 3 + index)}
-                  >
-                    <Image
-                      src={src}
-                      alt={`Training moment ${groupIndex * 3 + index + 1}`}
-                      fill
-                      className="object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
-                      sizes="(min-width: 768px) 33vw, 100vw"
-                      priority={groupIndex === 0 && index === 0}
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-lg" />
-                  </div>
-                ))}
-              </div>
-            ))}
-
-            {/* Clone first group at the end */}
-            <div className="w-full flex-none grid grid-cols-3 gap-4 p-4">
-              {images.slice(0, 3).map((src, index) => (
-                <div
-                  key={`clone-end-${index}`}
-                  className="aspect-[4/3] relative cursor-pointer group"
-                  onClick={() => handleImageClick(index)}
-                >
-                  <Image
-                    src={src}
-                    alt="Training moment"
-                    fill
-                    className="object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
-                    sizes="(min-width: 768px) 33vw, 100vw"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-lg" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile View (single image) */}
-        <div className="md:hidden">
-          <div 
-            className="flex touch-pan-y"
-            style={{ 
-              transform: getSlideTransform(),
-              transition: isTransitioning ? 'none' : 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
-              willChange: 'transform'
-            }}
-            onTransitionEnd={handleTransitionEnd}
-            onTouchStart={handleDragStart}
-            onTouchMove={handleDragMove}
-            onTouchEnd={handleDragEnd}
-          >
-            {/* Clone last image at the beginning */}
-            <div 
-              className="w-full flex-none cursor-pointer"
-              onClick={() => handleImageClick(images.length - 1)}
-            >
-              <div className="aspect-[16/9] relative">
+    <div 
+      className="relative overflow-hidden bg-white rounded-2xl shadow-lg"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Desktop View (3 images) */}
+      <div className="hidden md:block">
+        <div 
+          ref={carouselRef}
+          className="flex touch-pan-y"
+          style={{ 
+            transform: getSlideTransform(),
+            transition: isTransitioning ? 'none' : 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
+            willChange: 'transform'
+          }}
+          onTransitionEnd={handleTransitionEnd}
+          onMouseDown={handleDragStart}
+          onMouseMove={handleDragMove}
+          onMouseUp={handleDragEnd}
+          onMouseLeave={handleDragEnd}
+          onTouchStart={handleDragStart}
+          onTouchMove={handleDragMove}
+          onTouchEnd={handleDragEnd}
+        >
+          {/* Clone last group at the beginning */}
+          <div className="w-full flex-none grid grid-cols-3 gap-4 p-4">
+            {images.slice(-3).map((src, index) => (
+              <div key={`clone-start-${index}`} className="aspect-[4/3] relative">
                 <Image
-                  src={images[images.length - 1]}
+                  src={src}
                   alt="Training moment"
                   fill
-                  className="object-cover"
-                  sizes="100vw"
+                  className="object-cover rounded-lg"
+                  sizes="(min-width: 768px) 33vw, 100vw"
                   priority
                 />
               </div>
-            </div>
+            ))}
+          </div>
 
-            {/* Original images */}
-            {images.map((src, index) => (
-              <div 
-                key={src} 
-                className="w-full flex-none cursor-pointer"
-                onClick={() => handleImageClick(index)}
-              >
-                <div className="aspect-[16/9] relative">
+          {/* Original images in groups of 3 */}
+          {Array.from({ length: Math.ceil(images.length / 3) }).map((_, groupIndex) => (
+            <div key={groupIndex} className="w-full flex-none grid grid-cols-3 gap-4 p-4">
+              {images.slice(groupIndex * 3, (groupIndex + 1) * 3).map((src, index) => (
+                <div key={src} className="aspect-[4/3] relative">
                   <Image
                     src={src}
-                    alt={`Training moment ${index + 1}`}
+                    alt={`Training moment ${groupIndex * 3 + index + 1}`}
                     fill
-                    className="object-cover"
-                    sizes="100vw"
-                    priority={index === 0}
+                    className="object-cover rounded-lg"
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    priority={groupIndex === 0 && index === 0}
                   />
                 </div>
+              ))}
+            </div>
+          ))}
+
+          {/* Clone first group at the end */}
+          <div className="w-full flex-none grid grid-cols-3 gap-4 p-4">
+            {images.slice(0, 3).map((src, index) => (
+              <div key={`clone-end-${index}`} className="aspect-[4/3] relative">
+                <Image
+                  src={src}
+                  alt="Training moment"
+                  fill
+                  className="object-cover rounded-lg"
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                />
               </div>
             ))}
+          </div>
+        </div>
+      </div>
 
-            {/* Clone first image at the end */}
-            <div 
-              className="w-full flex-none cursor-pointer"
-              onClick={() => handleImageClick(0)}
-            >
+      {/* Mobile View (single image) */}
+      <div className="md:hidden">
+        <div 
+          className="flex touch-pan-y"
+          style={{ 
+            transform: getSlideTransform(),
+            transition: isTransitioning ? 'none' : 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
+            willChange: 'transform'
+          }}
+          onTransitionEnd={handleTransitionEnd}
+          onTouchStart={handleDragStart}
+          onTouchMove={handleDragMove}
+          onTouchEnd={handleDragEnd}
+        >
+          {/* Clone last image at the beginning */}
+          <div className="w-full flex-none">
+            <div className="aspect-[16/9] relative">
+              <Image
+                src={images[images.length - 1]}
+                alt="Training moment"
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority
+              />
+            </div>
+          </div>
+
+          {/* Original images */}
+          {images.map((src, index) => (
+            <div key={src} className="w-full flex-none">
               <div className="aspect-[16/9] relative">
                 <Image
-                  src={images[0]}
-                  alt="Training moment"
+                  src={src}
+                  alt={`Training moment ${index + 1}`}
                   fill
                   className="object-cover"
                   sizes="100vw"
+                  priority={index === 0}
                 />
               </div>
             </div>
+          ))}
+
+          {/* Clone first image at the end */}
+          <div className="w-full flex-none">
+            <div className="aspect-[16/9] relative">
+              <Image
+                src={images[0]}
+                alt="Training moment"
+                fill
+                className="object-cover"
+                sizes="100vw"
+              />
+            </div>
           </div>
         </div>
-
-        {/* Navigation Dots */}
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
-          {Array.from({ length: totalSlides }).map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-500 ${
-                index === (currentSlide - 1) % totalSlides
-                  ? 'bg-emerald-600 w-8' 
-                  : 'bg-white hover:bg-white/80'
-              }`}
-              aria-label={`Go to ${isDesktop ? 'group ' : 'image '}${index + 1}`}
-            />
-          ))}
-        </div>
-
-        {/* Navigation Arrows */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-gray-600 hover:bg-white hover:scale-110 transition-all duration-300"
-          aria-label="Previous image"
-        >
-          <ChevronLeft size={16} />
-        </button>
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-gray-600 hover:bg-white hover:scale-110 transition-all duration-300"
-          aria-label="Next image"
-        >
-          <ChevronRight size={16} />
-        </button>
       </div>
 
-      {/* Lightbox */}
-      <Lightbox
-        images={images}
-        initialIndex={lightboxIndex}
-        isOpen={lightboxOpen}
-        onClose={() => {
-          setLightboxOpen(false);
-          setIsAutoPlaying(true);
-        }}
-      />
-    </>
+      {/* Navigation Dots */}
+      <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+        {Array.from({ length: totalSlides }).map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-2 h-2 rounded-full transition-all duration-500 ${
+              index === (currentSlide - 1) % totalSlides
+                ? 'bg-emerald-600 w-8' 
+                : 'bg-white hover:bg-white/80'
+            }`}
+            aria-label={`Go to ${isDesktop ? 'group ' : 'image '}${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-gray-600 hover:bg-white hover:scale-110 transition-all duration-300"
+        aria-label="Previous image"
+      >
+        <ChevronLeft size={16} />
+      </button>
+      <button
+        onClick={nextSlide}
+        className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-gray-600 hover:bg-white hover:scale-110 transition-all duration-300"
+        aria-label="Next image"
+      >
+        <ChevronRight size={16} />
+      </button>
+    </div>
   );
 } 
