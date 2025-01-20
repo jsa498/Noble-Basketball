@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { MotionDiv, MotionH1, MotionP, GlowingButton } from '@/components/motion';
-import { programDetails, trainingFocus, coaches, locationInfo } from '@/lib/constants';
+import { programDetails, trainingFocus, coaches, locationInfo, practiceTimes, clubTeams } from '@/lib/constants';
 import { Map } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import TrainingGallery from '@/components/training-gallery';
@@ -27,8 +27,14 @@ interface Program {
   name: string;
   ageRange: string;
   pricing: {
-    oneDay: number;
-    twoDays: number;
+    monthly: {
+      oneDay: number;
+      twoDays: number;
+    };
+    threeMonth: {
+      oneDay: number;
+      twoDays: number;
+    };
   };
 }
 
@@ -88,7 +94,7 @@ const ProgramSelectionModal = ({ isOpen, onClose, program, onConfirm }: ProgramS
                   <p className="text-sm text-gray-500">Perfect for beginners</p>
                 </div>
                 <div className="text-2xl font-bold text-emerald-600">
-                  ${programInfo.pricing.oneDay}/month
+                  ${programInfo.pricing.monthly.oneDay}/month
                 </div>
               </button>
               
@@ -101,7 +107,7 @@ const ProgramSelectionModal = ({ isOpen, onClose, program, onConfirm }: ProgramS
                   <p className="text-sm text-gray-500">Recommended for faster progress</p>
                 </div>
                 <div className="text-2xl font-bold text-emerald-600">
-                  ${programInfo.pricing.twoDays}/month
+                  ${programInfo.pricing.monthly.twoDays}/month
                 </div>
               </button>
             </div>
@@ -343,7 +349,7 @@ export default function Home() {
     setIsSubmitting(true);
     
     const selectedProgram = (programDetails as ProgramDetails).ageGroups[formData.program.ageGroup];
-    const programCost = selectedProgram.pricing[formData.program.sessions];
+    const programCost = selectedProgram.pricing.monthly[formData.program.sessions];
     const sessionsText = formData.program.sessions === 'oneDay' ? '1 day' : '2 days';
     
     try {
@@ -414,7 +420,7 @@ export default function Home() {
 
   const getProgramPrice = () => {
     const { ageGroup, sessions } = formData.program;
-    return (programDetails as ProgramDetails).ageGroups[ageGroup].pricing[sessions];
+    return (programDetails as ProgramDetails).ageGroups[ageGroup].pricing.monthly[sessions];
   };
 
   const handleProgramSelect = (program: ProgramAgeGroup) => {
@@ -887,7 +893,9 @@ export default function Home() {
           {/* Program Pricing Section */}
           <section id="program-pricing" className="w-full py-16 px-4">
             <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">Program Pricing</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            
+            {/* Training Programs */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto mb-16">
               {/* Juniors Program */}
               <MotionDiv
                 initial={{ opacity: 0, y: 20 }}
@@ -900,17 +908,35 @@ export default function Home() {
                   <p className="text-emerald-100">Ages {programDetails.ageGroups.juniors.ageRange}</p>
                 </div>
                 <div className="p-6 space-y-6">
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-baseline">
-                      <span className="text-gray-600">1 Day per Week</span>
-                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.juniors.pricing.oneDay}/month</span>
-                    </div>
-                    <div className="flex justify-between items-baseline">
-                      <span className="text-gray-600">2 Days per Week</span>
-                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.juniors.pricing.twoDays}/month</span>
+                  <div>
+                    <h4 className="text-lg font-semibold mb-4">Monthly Rates</h4>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-gray-600">1 Practice per Week</span>
+                        <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.juniors.pricing.monthly.oneDay}/month</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-gray-600">2 Practices per Week</span>
+                        <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.juniors.pricing.monthly.twoDays}/month</span>
+                      </div>
                     </div>
                   </div>
-                  <ul className="space-y-3">
+                  
+                  <div className="pt-4 border-t">
+                    <h4 className="text-lg font-semibold mb-4">3-Month Package</h4>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-gray-600">1 Practice per Week</span>
+                        <span className="text-2xl font-bold text-emerald-600">${programDetails.ageGroups.juniors.pricing.threeMonth.oneDay}</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-gray-600">2 Practices per Week</span>
+                        <span className="text-2xl font-bold text-emerald-600">${programDetails.ageGroups.juniors.pricing.threeMonth.twoDays}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ul className="space-y-3 pt-4 border-t">
                     {programDetails.features.map((feature, index) => (
                       <li key={index} className="flex items-center text-gray-600">
                         <svg className="h-5 w-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -941,17 +967,35 @@ export default function Home() {
                   <p className="text-emerald-100">Ages {programDetails.ageGroups.seniors.ageRange}</p>
                 </div>
                 <div className="p-6 space-y-6">
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-baseline">
-                      <span className="text-gray-600">1 Day per Week</span>
-                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.seniors.pricing.oneDay}/month</span>
-                    </div>
-                    <div className="flex justify-between items-baseline">
-                      <span className="text-gray-600">2 Days per Week</span>
-                      <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.seniors.pricing.twoDays}/month</span>
+                  <div>
+                    <h4 className="text-lg font-semibold mb-4">Monthly Rates</h4>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-gray-600">1 Practice per Week</span>
+                        <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.seniors.pricing.monthly.oneDay}/month</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-gray-600">2 Practices per Week</span>
+                        <span className="text-2xl font-bold text-gray-900">${programDetails.ageGroups.seniors.pricing.monthly.twoDays}/month</span>
+                      </div>
                     </div>
                   </div>
-                  <ul className="space-y-3">
+                  
+                  <div className="pt-4 border-t">
+                    <h4 className="text-lg font-semibold mb-4">3-Month Package</h4>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-gray-600">1 Practice per Week</span>
+                        <span className="text-2xl font-bold text-emerald-600">${programDetails.ageGroups.seniors.pricing.threeMonth.oneDay}</span>
+                      </div>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-gray-600">2 Practices per Week</span>
+                        <span className="text-2xl font-bold text-emerald-600">${programDetails.ageGroups.seniors.pricing.threeMonth.twoDays}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ul className="space-y-3 pt-4 border-t">
                     {programDetails.features.map((feature, index) => (
                       <li key={index} className="flex items-center text-gray-600">
                         <svg className="h-5 w-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -969,6 +1013,93 @@ export default function Home() {
                   </a>
                 </div>
               </MotionDiv>
+            </div>
+
+            {/* Club Teams Section */}
+            <div className="max-w-6xl mx-auto mt-20">
+              <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Club Teams</h2>
+              
+              <MotionDiv
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 hover:shadow-xl transition-all duration-300 mb-12"
+              >
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">U13-U18 Boys & Girls Club (1 Season)</h3>
+                  <p className="text-3xl font-bold text-emerald-600">${clubTeams.seasonPrice}</p>
+                  <p className="text-gray-600 mt-2">Limited spots available - {clubTeams.maxSpotsPerTeam} per team</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                  <div>
+                    <h4 className="text-lg font-semibold mb-4 text-gray-900">Season Includes:</h4>
+                    <ul className="space-y-3">
+                      {clubTeams.seasonIncludes.map((item, index) => (
+                        <li key={index} className="flex items-center text-gray-600">
+                          <svg className="h-5 w-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                          </svg>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="text-lg font-semibold mb-4 text-gray-900">Available Teams:</h4>
+                    <ul className="space-y-3">
+                      {clubTeams.teams.map((team, index) => (
+                        <li key={index} className="flex items-center text-gray-600">
+                          <svg className="h-5 w-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                          </svg>
+                          {team.name} ({team.ageGroup})
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <a
+                    href="#contact"
+                    className="inline-block px-8 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors"
+                  >
+                    Join a Club Team
+                  </a>
+                </div>
+              </MotionDiv>
+            </div>
+
+            {/* Practice Times Section */}
+            <div className="max-w-6xl mx-auto mt-20">
+              <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Practice Schedule</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {Object.entries(practiceTimes).map(([key, schedule], index) => (
+                  <MotionDiv
+                    key={key}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300"
+                  >
+                    <div className="text-center space-y-4">
+                      <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto">
+                        <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-900">{schedule.day}</h3>
+                        <p className="text-emerald-600 font-semibold">{schedule.time}</p>
+                        <p className="text-gray-600 mt-2">{schedule.groups}</p>
+                      </div>
+                    </div>
+                  </MotionDiv>
+                ))}
+              </div>
             </div>
           </section>
         </div>

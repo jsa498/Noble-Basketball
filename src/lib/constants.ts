@@ -35,22 +35,52 @@ export const locationInfo = {
   fullAddress: "10677 124 St, Surrey, BC V3V 0B1"
 };
 
+export const practiceTimes = {
+  all: {
+    day: "Thursday",
+    time: "5:30-6:30 PM",
+    groups: "All age groups"
+  },
+  girls: {
+    day: "Saturday",
+    time: "1:00-2:00 PM",
+    groups: "U13-U18 girls"
+  },
+  boys: {
+    day: "Saturday",
+    time: "2:00-3:00 PM",
+    groups: "U13-U18 boys"
+  }
+};
+
 export const programDetails = {
   ageGroups: {
     juniors: {
-      name: "Juniors Training Program",
+      name: "U8-U12 Boys & Girls Training",
       ageRange: "8-12",
       pricing: {
-        oneDay: 100,
-        twoDays: 150
+        monthly: {
+          oneDay: 100,
+          twoDays: 150
+        },
+        threeMonth: {
+          oneDay: 300,
+          twoDays: 450
+        }
       }
     },
     seniors: {
-      name: "Seniors Training Program",
+      name: "U13-U18 Boys & Girls Training",
       ageRange: "13-18",
       pricing: {
-        oneDay: 200,
-        twoDays: 250
+        monthly: {
+          oneDay: 150,
+          twoDays: 200
+        },
+        threeMonth: {
+          oneDay: 450,
+          twoDays: 550
+        }
       }
     }
   },
@@ -61,6 +91,39 @@ export const programDetails = {
     "Regular progress assessments",
     "Group training",
     "Flexible scheduling options"
+  ]
+};
+
+export const clubTeams = {
+  maxSpotsPerTeam: 10,
+  seasonPrice: 875,
+  seasonIncludes: [
+    "2 practices per month",
+    "6 tournaments",
+    "24 practices (3 months)",
+    "Jerseys"
+  ],
+  teams: [
+    {
+      name: "Junior Boys",
+      ageGroup: "U13-U15",
+      gender: "boys"
+    },
+    {
+      name: "Senior Boys",
+      ageGroup: "U16-U18",
+      gender: "boys"
+    },
+    {
+      name: "Junior Girls",
+      ageGroup: "U13-U15",
+      gender: "girls"
+    },
+    {
+      name: "Senior Girls",
+      ageGroup: "U16-U18",
+      gender: "girls"
+    }
   ]
 };
 
