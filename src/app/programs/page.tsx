@@ -108,12 +108,12 @@ export default function Programs() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div>
                 <h3 className="text-xl font-semibold mb-2">One Day/Week</h3>
-                <p className="text-2xl mb-2">${programDetails.ageGroups.juniors.pricing.oneDay}</p>
+                <p className="text-2xl mb-2">${programDetails.ageGroups.juniors.pricing.monthly.oneDay}</p>
                 <p className="text-lg opacity-75">per month</p>
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2">Two Days/Week</h3>
-                <p className="text-2xl mb-2">${programDetails.ageGroups.juniors.pricing.twoDays}</p>
+                <p className="text-2xl mb-2">${programDetails.ageGroups.juniors.pricing.monthly.twoDays}</p>
                 <p className="text-lg opacity-75">per month</p>
               </div>
             </div>
