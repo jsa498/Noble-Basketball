@@ -98,7 +98,7 @@ export const clubTeams = {
   maxSpotsPerTeam: 10,
   seasonPrice: 875,
   seasonIncludes: [
-    "2 practices per month",
+    "2 practices per week",
     "6 tournaments",
     "24 practices (3 months)",
     "Jerseys"
