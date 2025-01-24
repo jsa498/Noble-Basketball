@@ -1,3 +1,4 @@
+//src//app//page.tsx
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -6,6 +7,7 @@ import { programDetails, trainingFocus, coaches, locationInfo, practiceTimes, cl
 import { Map } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import TrainingGallery from '@/components/training-gallery';
+import ClubRegistrationModal from '@/components/club-registration-modal';
 
 type ProgramAgeGroup = 'juniors' | 'seniors';
 type ProgramSessions = 'oneDay' | 'twoDays';
@@ -244,6 +246,10 @@ export default function Home() {
   const [selectedProgram, setSelectedProgram] = useState<ProgramAgeGroup | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successProgramName, setSuccessProgramName] = useState('');
+
+  // Add state for club registration modal
+  const [isClubModalOpen, setIsClubModalOpen] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState('');
 
   useEffect(() => {
     const handleResize = () => {
@@ -1063,7 +1069,10 @@ export default function Home() {
 
                 <div className="text-center">
                   <a
-                    href="#contact"
+                    onClick={() => {
+                      setIsClubModalOpen(true);
+                      setSelectedTeam(programDetails.ageGroups.juniors.name);
+                    }}
                     className="inline-block px-8 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors"
                   >
                     Join a Club Team
@@ -1346,6 +1355,12 @@ export default function Home() {
         isOpen={showSuccessModal}
         onClose={() => setShowSuccessModal(false)}
         programName={successProgramName}
+      />
+
+      <ClubRegistrationModal
+        isOpen={isClubModalOpen}
+        onClose={() => setIsClubModalOpen(false)}
+        teamName={selectedTeam}
       />
     </>
   );
