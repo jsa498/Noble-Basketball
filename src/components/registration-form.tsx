@@ -6,6 +6,19 @@ import { programDetails } from '@/lib/constants';
 type ProgramAgeGroup = 'juniors' | 'seniors';
 type ProgramSessions = 'oneDay' | 'twoDays';
 
+interface ProgramDetails {
+  ageGroups: {
+    [key in ProgramAgeGroup]: {
+      name: string;
+      pricing: {
+        monthly: {
+          [key in ProgramSessions]: number;
+        };
+      };
+    };
+  };
+}
+
 interface FormData {
   childName: string;
   childAge: string;
@@ -65,7 +78,7 @@ export default function RegistrationForm({ onSubmit, isSubmitting }: Registratio
 
   const getProgramPrice = () => {
     const { ageGroup, sessions } = formData.program;
-    return (programDetails as any).ageGroups[ageGroup].pricing.monthly[sessions];
+    return (programDetails as ProgramDetails).ageGroups[ageGroup].pricing.monthly[sessions];
   };
 
   return (
@@ -119,7 +132,7 @@ export default function RegistrationForm({ onSubmit, isSubmitting }: Registratio
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="childName" className="block text-sm font-medium text-gray-700 mb-1">
-              Child's Full Name
+              Child&apos;s Full Name
             </label>
             <input
               type="text"
@@ -135,7 +148,7 @@ export default function RegistrationForm({ onSubmit, isSubmitting }: Registratio
           
           <div>
             <label htmlFor="childAge" className="block text-sm font-medium text-gray-700 mb-1">
-              Child's Age
+              Child&apos;s Age
             </label>
             <input
               type="number"
@@ -153,7 +166,7 @@ export default function RegistrationForm({ onSubmit, isSubmitting }: Registratio
 
           <div>
             <label htmlFor="childGender" className="block text-sm font-medium text-gray-700 mb-1">
-              Child's Gender
+              Child&apos;s Gender
             </label>
             <select
               id="childGender"

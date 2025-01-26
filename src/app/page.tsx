@@ -1237,7 +1237,7 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="childName" className="block text-sm font-medium text-gray-700 mb-1">
-                      Child's Full Name
+                      Child&apos;s Full Name
                     </label>
                     <input
                       type="text"
@@ -1253,7 +1253,7 @@ export default function Home() {
                   
                   <div>
                     <label htmlFor="childAge" className="block text-sm font-medium text-gray-700 mb-1">
-                      Child's Age
+                      Child&apos;s Age
                     </label>
                     <input
                       type="number"
@@ -1271,7 +1271,7 @@ export default function Home() {
 
                   <div>
                     <label htmlFor="childGender" className="block text-sm font-medium text-gray-700 mb-1">
-                      Child's Gender
+                      Child&apos;s Gender
                     </label>
                     <select
                       id="childGender"

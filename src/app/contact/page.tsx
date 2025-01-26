@@ -7,6 +7,22 @@ import RegistrationForm from '@/components/registration-form';
 import emailjs from '@emailjs/browser';
 import { programDetails } from '@/lib/constants';
 
+type ProgramAgeGroup = 'juniors' | 'seniors';
+type ProgramSessions = 'oneDay' | 'twoDays';
+
+interface ProgramDetails {
+  ageGroups: {
+    [key in ProgramAgeGroup]: {
+      name: string;
+      pricing: {
+        monthly: {
+          [key in ProgramSessions]: number;
+        };
+      };
+    };
+  };
+}
+
 interface FormData {
   childName: string;
   childAge: string;
@@ -16,8 +32,8 @@ interface FormData {
   phone: string;
   message: string;
   program: {
-    ageGroup: 'juniors' | 'seniors';
-    sessions: 'oneDay' | 'twoDays';
+    ageGroup: ProgramAgeGroup;
+    sessions: ProgramSessions;
   };
 }
 
@@ -30,7 +46,7 @@ export default function Contact() {
     setIsSubmitting(true);
     
     try {
-      const selectedProgram = (programDetails as any).ageGroups[formData.program.ageGroup];
+      const selectedProgram = (programDetails as ProgramDetails).ageGroups[formData.program.ageGroup];
       const programCost = selectedProgram.pricing.monthly[formData.program.sessions];
       const sessionsText = formData.program.sessions === 'oneDay' ? '1 day' : '2 days';
       
