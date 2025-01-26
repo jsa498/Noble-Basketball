@@ -7,10 +7,24 @@ import RegistrationForm from '@/components/registration-form';
 import emailjs from '@emailjs/browser';
 import { programDetails } from '@/lib/constants';
 
+interface FormData {
+  childName: string;
+  childAge: string;
+  childGender: string;
+  parentName: string;
+  email: string;
+  phone: string;
+  message: string;
+  program: {
+    ageGroup: 'juniors' | 'seniors';
+    sessions: 'oneDay' | 'twoDays';
+  };
+}
+
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: FormData) => {
     if (isSubmitting) return;
     
     setIsSubmitting(true);
@@ -25,6 +39,7 @@ export default function Contact() {
         from_name: formData.parentName,
         child_name: formData.childName,
         child_age: formData.childAge,
+        childGender: formData.childGender,
         email: formData.email,
         phone: formData.phone,
         message: formData.message || "No additional information provided",
