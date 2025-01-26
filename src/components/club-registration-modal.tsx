@@ -19,6 +19,7 @@ interface RegistrationFormData {
   childFirstName: string;
   childLastName: string;
   age: string;
+  gender: string;
   height: string;
   grade: string;
   highSchool: string;
@@ -37,6 +38,7 @@ export default function ClubRegistrationModal({ isOpen, onClose, teamName }: Clu
     childFirstName: '',
     childLastName: '',
     age: '',
+    gender: '',
     height: '',
     grade: '',
     highSchool: '',
@@ -63,6 +65,7 @@ export default function ClubRegistrationModal({ isOpen, onClose, teamName }: Clu
           child_first_name: formData.childFirstName,
           child_last_name: formData.childLastName,
           age: formData.age,
+          gender: formData.gender,
           height: formData.height,
           grade: formData.grade,
           high_school: formData.highSchool,
@@ -83,6 +86,7 @@ export default function ClubRegistrationModal({ isOpen, onClose, teamName }: Clu
           childFirstName: '',
           childLastName: '',
           age: '',
+          gender: '',
           height: '',
           grade: '',
           highSchool: '',
@@ -97,7 +101,7 @@ export default function ClubRegistrationModal({ isOpen, onClose, teamName }: Clu
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
@@ -209,6 +213,20 @@ export default function ClubRegistrationModal({ isOpen, onClose, teamName }: Clu
                   max="18"
                   className="w-full px-4 py-2 bg-gray-50 text-gray-900 rounded-lg border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all duration-200"
                 />
+              </div>
+              <div className="mt-4">
+                <select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-2 bg-gray-50 text-gray-900 rounded-lg border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all duration-200"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
               </div>
               <div className="grid grid-cols-2 gap-4 mt-4">
                 <div>

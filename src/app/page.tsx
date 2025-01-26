@@ -15,6 +15,7 @@ type ProgramSessions = 'oneDay' | 'twoDays';
 interface FormData {
   childName: string;
   childAge: string;
+  childGender: string;
   parentName: string;
   email: string;
   phone: string;
@@ -219,6 +220,7 @@ export default function Home() {
   const [formData, setFormData] = useState<FormData>({
     childName: '',
     childAge: '',
+    childGender: '',
     parentName: '',
     email: '',
     phone: '',
@@ -364,6 +366,7 @@ export default function Home() {
         from_name: formData.parentName,
         child_name: formData.childName,
         child_age: formData.childAge,
+        childGender: formData.childGender,
         email: formData.email,
         phone: formData.phone,
         message: formData.message || "No additional information provided",
@@ -389,6 +392,7 @@ export default function Home() {
       setFormData({
         childName: '',
         childAge: '',
+        childGender: '',
         parentName: '',
         email: '',
         phone: '',
@@ -1183,146 +1187,186 @@ export default function Home() {
           >
             <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">Register for Noble Basketball</h2>
             
-            <form id="registration-form" onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form id="registration-form" onSubmit={handleSubmit} className="space-y-8">
+              {/* Program Selection */}
+              <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+                <h3 className="text-lg font-semibold text-emerald-700">Program Selection</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="program.ageGroup" className="block text-sm font-medium text-gray-700 mb-1">
+                      Program Type
+                    </label>
+                    <select
+                      id="program.ageGroup"
+                      name="program.ageGroup"
+                      value={formData.program.ageGroup}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+                    >
+                      <option value="juniors">Juniors Training Program (Ages 8-12)</option>
+                      <option value="seniors">Seniors Training Program (Ages 13-18)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label htmlFor="program.sessions" className="block text-sm font-medium text-gray-700 mb-1">
+                      Sessions per Week
+                    </label>
+                    <select
+                      id="program.sessions"
+                      name="program.sessions"
+                      value={formData.program.sessions}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+                    >
+                      <option value="oneDay">1 Day per Week</option>
+                      <option value="twoDays">2 Days per Week</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="mt-2 bg-emerald-50 p-4 rounded-lg">
+                  <p className="text-emerald-700 font-medium">Selected Program Cost: ${getProgramPrice()}/month</p>
+                </div>
+              </div>
+
+              {/* Player Information */}
+              <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+                <h3 className="text-lg font-semibold text-emerald-700">Player Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="childName" className="block text-sm font-medium text-gray-700 mb-1">
+                      Child's Full Name
+                    </label>
+                    <input
+                      type="text"
+                      id="childName"
+                      name="childName"
+                      value={formData.childName}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+                      placeholder="Enter full name"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="childAge" className="block text-sm font-medium text-gray-700 mb-1">
+                      Child's Age
+                    </label>
+                    <input
+                      type="number"
+                      id="childAge"
+                      name="childAge"
+                      value={formData.childAge}
+                      onChange={handleChange}
+                      required
+                      min="8"
+                      max="18"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+                      placeholder="Enter age"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="childGender" className="block text-sm font-medium text-gray-700 mb-1">
+                      Child's Gender
+                    </label>
+                    <select
+                      id="childGender"
+                      name="childGender"
+                      value={formData.childGender}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Parent/Guardian Information */}
+              <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+                <h3 className="text-lg font-semibold text-emerald-700">Parent/Guardian Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="parentName" className="block text-sm font-medium text-gray-700 mb-1">
+                      Parent/Guardian Name
+                    </label>
+                    <input
+                      type="text"
+                      id="parentName"
+                      name="parentName"
+                      value={formData.parentName}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+                      placeholder="Enter full name"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+                      placeholder="Enter email address"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+                      placeholder="Enter phone number"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Information */}
+              <div className="bg-gray-50 p-6 rounded-xl space-y-6">
+                <h3 className="text-lg font-semibold text-emerald-700">Additional Information</h3>
                 <div>
-                  <label htmlFor="childName" className="block text-sm font-medium text-gray-700 mb-1">
-                    Child&apos;s Name
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                    Additional Notes (Optional)
                   </label>
-                  <input
-                    type="text"
-                    id="childName"
-                    name="childName"
-                    value={formData.childName}
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
                     onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+                    rows={4}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 resize-none"
+                    placeholder="Any additional information you'd like us to know"
                   />
                 </div>
-                
-                <div>
-                  <label htmlFor="childAge" className="block text-sm font-medium text-gray-700 mb-1">
-                    Child&apos;s Age
-                  </label>
-                  <input
-                    type="number"
-                    id="childAge"
-                    name="childAge"
-                    value={formData.childAge}
-                    onChange={handleChange}
-                    required
-                    min="8"
-                    max="18"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="program.ageGroup" className="block text-sm font-medium text-gray-700 mb-1">
-                    Program
-                  </label>
-                  <select
-                    id="program.ageGroup"
-                    name="program.ageGroup"
-                    value={formData.program.ageGroup}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
-                  >
-                    <option value="juniors">Juniors Training Program (Ages 8-12)</option>
-                    <option value="seniors">Seniors Training Program (Ages 13-18)</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="program.sessions" className="block text-sm font-medium text-gray-700 mb-1">
-                    Sessions per Week
-                  </label>
-                  <select
-                    id="program.sessions"
-                    name="program.sessions"
-                    value={formData.program.sessions}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
-                  >
-                    <option value="oneDay">1 Day per Week</option>
-                    <option value="twoDays">2 Days per Week</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="bg-emerald-50 p-4 rounded-lg">
-                <p className="text-emerald-800 font-medium">
-                  Selected Program Cost: ${getProgramPrice()} per month
-                </p>
-              </div>
-
-              <div>
-                <label htmlFor="parentName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Parent/Guardian Name
-                </label>
-                <input
-                  type="text"
-                  id="parentName"
-                  name="parentName"
-                  value={formData.parentName}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                  Additional Information (Optional)
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 resize-none"
-                />
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full bg-emerald-600 text-white py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg font-semibold ${
+                className={`w-full bg-emerald-600 text-white py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg font-semibold ${
                   isSubmitting ? 'opacity-75 cursor-not-allowed' : 'hover:bg-emerald-700'
                 }`}
               >

@@ -1,3 +1,4 @@
+//src//lib//constants.ts
 export const siteConfig = {
   name: "Noble Basketball",
   description: "Comprehensive youth training and skill development programs for basketball enthusiasts.",

@@ -1,3 +1,4 @@
+//src//app//about//page.tsx
 import { MotionDiv } from '@/components/motion';
 import { coaches } from '@/lib/constants';
 

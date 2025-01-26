@@ -1,3 +1,4 @@
+//src//components//training-gallery.tsx
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';

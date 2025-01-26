@@ -1,3 +1,4 @@
+//src//components//footer.tsx
 'use client';
 
 import { Instagram, Phone, Mail, Map } from 'lucide-react';

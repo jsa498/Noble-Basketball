@@ -1,3 +1,4 @@
+//src//app//programs//page.tsx
 import Link from 'next/link';
 import { MotionDiv } from '@/components/motion';
 import { programDetails, trainingFocus } from '@/lib/constants';
