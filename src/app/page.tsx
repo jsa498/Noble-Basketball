@@ -1039,13 +1039,13 @@ export default function Home() {
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">U13-U18 Boys & Girls Club (1 Season)</h3>
                   <p className="text-3xl font-bold text-emerald-600">${clubTeams.seasonPrice}</p>
                   <p className="text-gray-600 mt-2">Limited spots available - {clubTeams.maxSpotsPerTeam} per team</p>
-                  <div className="inline-block mt-4 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-full">
-                    <p className="text-emerald-600 font-semibold flex items-center">
-                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="inline-flex items-center justify-center mt-4 px-3 sm:px-4 py-1.5 sm:py-2 bg-emerald-50 border border-emerald-200 rounded-full max-w-[90%] mx-auto">
+                    <span className="text-emerald-600 font-semibold text-sm sm:text-base flex items-center whitespace-nowrap">
+                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                       </svg>
                       One-time payment of $120 for 2 jerseys
-                    </p>
+                    </span>
                   </div>
                 </div>
 
